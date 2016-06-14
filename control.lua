@@ -8,7 +8,7 @@ require "config.defaults"
 
 
 local MOD_NAME = "CTLM";
-local MOD_VERSION = 0.1;
+local MOD_VERSION = "0.0.1";
 local CONFIG_NAME = MOD_NAME .. "_config";
 local CTLM = {};
 local config = {};
@@ -28,10 +28,6 @@ function CTLM:load()
 
     if not config.version then
         config.version = MOD_VERSION;
-    end
-
-    if config.version < MOD_VERSION then
-        CTLM:migrateConfig();
     end
 
     self.printall("Load");
