@@ -172,7 +172,7 @@ function CTLM:debug(msg)
 --    end
 end
 
---Special function to "deep" copy a table to about references. That would be bad. :/
+--Special function to "deep" copy a table to avoid references. That would be bad. :/
 function CTLM:deepCopy(object)
     local lookup_table = {}
     local function _copy(object)
