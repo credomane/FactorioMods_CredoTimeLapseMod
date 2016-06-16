@@ -36,7 +36,7 @@ function CTLM.config.new_player(player)
         CTLM.log("Unsupported player type given as parameter '" .. type(player) .. "'.");
     end
 
-    if not global.config.players[player.name] then
+    if not global.players[player.name] then
         global.players[player.name] = CTLM.config.deepCopy(config.player_defaults);
         --Stored for when we just pass around a lua table of this player with out the proceeding named index.
         global.players[player.name].name = player.name;

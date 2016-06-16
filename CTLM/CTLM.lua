@@ -129,6 +129,14 @@ function CTLM.GenFilename(screenshotType, screenshotName)
 end
 
 function CTLM.log(msg)
+    if type(msg) == "table" then
+        for key,value in pairs(msg) do
+            msg = value .. "[" .. key .. "] ";
+        end
+    end
+
+    msg = "[CTLM] " .. msg;
+
     if game then
         game.write_file(MOD_NAME .. "/debug.log", msg .. "\n", true);
 
