@@ -130,9 +130,7 @@ end
 
 function CTLM.log(msg)
     if type(msg) == "table" then
-        for key,value in pairs(msg) do
-            msg = value .. "[" .. key .. "] ";
-        end
+        msg = "[" .. msg[1] .. "] [" .. msg[2] .. "]" .. msg[3];
     end
 
     msg = "[CTLM] " .. msg;
