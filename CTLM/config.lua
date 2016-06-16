@@ -15,7 +15,7 @@ if not CTLM.config then CTLM.config = {} end
 if not CTLM.gui then CTLM.gui = {} end
 
 --Fix/install config!
-function CTML.config.init()
+function CTLM.config.init()
     if not global.config then
         global.config = CTLM.config.deepCopy(config.defaults);
     end
@@ -23,7 +23,7 @@ function CTML.config.init()
     if not global.positions then global.positions = {}; end
 end
 
-function CTML.config.new_player(player)
+function CTLM.config.new_player(player)
     if type(player) == "LuaPlayer" then
         --do nothing this is actually the type we are after. :)
     elseif type(player) == "string" then
@@ -58,7 +58,7 @@ end
 
 -- Found on Internet. Original author unknown.
 -- deep copies a table to avoid references as that would be bad. :/
-function CTML.config.deepCopy(object)
+function CTLM.config.deepCopy(object)
     local lookup_table = {}
     local function _copy(object)
         if type(object) ~= "table" then

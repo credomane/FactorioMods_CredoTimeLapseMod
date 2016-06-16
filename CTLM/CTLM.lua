@@ -11,27 +11,27 @@ if not CTLM then CTLM = {} end
 if not CTLM.config then CTLM.config = {} end
 if not CTLM.gui then CTLM.gui = {} end
 
-function CTML.init()
+function CTLM.init()
     CTLM.log("BEG on_init");
-    CTML.config.init();
+    CTLM.config.init();
 
     for _, player in pairs(game.players) do
         CTLM.config.new_player(player)
     end
 
-    CTML.gui.init();
+    CTLM.gui.init();
     CTLM.load();
     CTLM.log("END on_init");
 end
 
-function CTML.load()
+function CTLM.load()
     CTLM.log("BEG on_load");
-    CTML.config.init()
-    CTML.gui.init()
+    CTLM.config.init()
+    CTLM.gui.init()
     CTLM.log("END on_load");
 end
 
-function CTML.tick()
+function CTLM.tick()
     if game.speed > 3 or not CTLM.config.get("enabled") then
         return;
     end
@@ -79,7 +79,7 @@ end
 --screenshot functions!
 --------------------------------------
 
-function CTML.screenshotPlayer(configPlayer)
+function CTLM.screenshotPlayer(configPlayer)
     local player = CTLM.getPlayerByName(configPlayer.name);
     if not player then return nil end
 
@@ -99,10 +99,10 @@ function CTML.screenshotPlayer(configPlayer)
     });
 
     game.daytime = currentTime;
-    CTML.log("CTML.screenshotPlayer: " .. configPlayer.name);
+    CTLM.log("CTLM.screenshotPlayer: " .. configPlayer.name);
 end
 
-function CTML.screenshotPosition(configPosition)
+function CTLM.screenshotPosition(configPosition)
     local currentTime = game.daytime;
 
     if configPosition.dayOnly then
@@ -120,15 +120,15 @@ function CTML.screenshotPosition(configPosition)
     });
 
     game.daytime = currentTime;
-    CTML.log("CTML.screenshotPosition: " .. configPosition.name);
+    CTLM.log("CTLM.screenshotPosition: " .. configPosition.name);
 end
 
 --File name to save screenshot as
-function CTML.GenFilename(screenshotType, screenshotName)
+function CTLM.GenFilename(screenshotType, screenshotName)
     return MOD_NAME .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", CTLM.config.get("screenshotNumber")) .. ".png";
 end
 
-function CTML.log(msg)
+function CTLM.log(msg)
     if game then
         game.write_file(MOD_NAME .. "/debug.log", msg .. "\n", true);
 
