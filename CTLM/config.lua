@@ -24,7 +24,7 @@ function CTLM.config.init()
 end
 
 function CTLM.config.new_player(player)
-    if type(player) == "LuaPlayer" then
+    if type(player) == "table" and player.valid then
         --do nothing this is actually the type we are after. :)
     elseif type(player) == "string" then
         --Probably a player name. Get them by name!
@@ -33,8 +33,7 @@ function CTLM.config.new_player(player)
         --Probably an index to a player. Get the player at that index
         player = game.get_player(player);
     else
-        local msg = "Unsupported player type given as parameter '" .. type(player) .. "'.";
-        CTLM.log(msg);
+        CTLM.log("Unsupported player type given as parameter '" .. type(player) .. "'.");
     end
 
     if not global.config.players[player.name] then
