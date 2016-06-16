@@ -4,29 +4,25 @@ require "defines"
 require "util"
 
 --CTLM libs
-require "config.defaults"
-require "CTLMgui"
-
-
-MOD_NAME = "CTLM";
-MOD_VERSION = "0.0.1";
+require "CTLM.config"
+require "CTLM.gui"
 
 if not CTLM then CTLM = {} end
-if not CTLMconfig then CTLMconfig = {} end
-if not CTLMgui then CTLMgui = {} end
+if not CTLM.config then CTLM.config = {} end
+if not CTLM.gui then CTLM.gui = {} end
 
---Ran first time [only] mod is installed into a game world.
 function CTML.init()
-debuglog("BEG on_init");
+    CTLM.log("BEG on_init");
+    CTMLconfig.init();
+    CTMLgui.init();
     CTLM.load();
-debuglog("END on_init");
+    CTLM.log("END on_init");
 end
 
---Ran everytime a world is loaded that has a reference to this mod.
 function CTML.load()
-debuglog("BEG on_load");
-    CTLM.initConfig()
-debuglog("END on_load");
+    CTLM.log("BEG on_load");
+    CTMLconfig.initConfig()
+    CTLM.log("END on_load");
 end
 
 function CTML.tick()
@@ -35,8 +31,8 @@ function CTML.tick()
     end
 
     if game.tick % (game.speed * CTLMconfig.screenshotInterval ) == 0 then
-        --Time to loop through them screenshots!
-        debuglog("Taking screenshots...");
+        --Time to loop through and take them screenshots!
+        CTLM.log("Taking screenshots...");
         local screenshotTaken = false;
         for index, player in ipairs(game.players) do
             if player.valid and player.connected and CTLMconfig.players[player.name] and CTLMconfig.players[player.name].enabled then
@@ -69,14 +65,6 @@ end
 --Helper functions are the bees knees!
 --------------------------------------
 
---Fix/install config!
-function CTML.initConfig()
-    if not global.config then
-        global.config = deepCopy(config_defaults);
-    end
-    CTLMconfig = global.config;
-end
-
 --screenshot functions!
 function CTML.playerScreenshot(index)
     local currentTime = game.daytime;
@@ -94,7 +82,7 @@ function CTML.playerScreenshot(index)
     });
 
     game.daytime = currentTime;
-    printall("playerScreenshot: " .. game.players[index].name);
+    CTML.log("playerScreenshot: " .. game.players[index].name);
 end
 
 function CTML.positionScreenshot(index)
@@ -114,27 +102,7 @@ function CTML.positionScreenshot(index)
     });
 
     game.daytime = currentTime;
-    printall("positionScreenshot: " .. game.positions[index].name);
-end
-
-function CTML.surfaceScreenshot(index)
-    local currentTime = game.daytime;
-    if CTLMconfig.surfaces[index].dayOnly then
-        game.daytime = 0;
-    end
-
-    game.take_screenshot({
-        surface = game.surfaces[index],
-        position = { CTLMconfig.surfaces[index].positionX, CTLMconfig.surfaces[index].positionY },
-        resolution = { CTLMconfig.surfaces[index].width, CTLMconfig.surfaces[index].height },
-        zoom = CTLMconfig.surfaces[index].zoom,
-        path = genFilename("surface", game.surfaces[index].name),
-        CTLMconfig.surfaces[index].show_gui,
-        CTLMconfig.surfaces[index].show_altinfo
-    });
-
-    game.daytime = currentTime;
-    printall("surfaceScreenshot: " .. game.surfaces[index].name);
+    CTML.log("positionScreenshot: " .. game.positions[index].name);
 end
 
 --add*(index) functions
@@ -161,39 +129,14 @@ function CTML.GenFilename(screenshotType, screenshotName)
     return MOD_NAME .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", CTLMconfig.screenshotNumber) .. ".png";
 end
 
---Print a message to ALL players currently connected. Only used in debugging but left in release so it isn't lost.
-function CTML.printall(msg)
-    for index, player in ipairs(game.players) do
-        if player.valid and player.connected then
-            player.print(msg);
-        end
-    end
-end
-
-function CTML.debug(msg)
-    if not game then
-        return;
-    end
-    if CTLMdebug then
+function CTML.log(msg)
+    if game then
         game.write_file(MOD_NAME .. "/debug.log", msg .. "\n", true);
-    end
-end
 
---Special function to "deep" copy a table to avoid references. That would be bad. :/
-function CTML.deepCopy(object)
-    local lookup_table = {}
-    local function _copy(object)
-        if type(object) ~= "table" then
-            return object
-        elseif lookup_table[object] then
-            return lookup_table[object]
+        for index, player in ipairs(game.players) do
+            player.print(message)
         end
-        local new_table = {}
-        lookup_table[object] = new_table
-        for index, value in pairs(object) do
-            new_table[_copy(index)] = _copy(value)
-        end
-        return setmetatable(new_table, getmetatable(object))
+    else
+        error(serpent.dump(message, {compact = false, nocode = true, indent = ' '}))
     end
-    return _copy(object)
 end
