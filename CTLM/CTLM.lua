@@ -13,50 +13,50 @@ if not CTLM.gui then CTLM.gui = {} end
 
 function CTML.init()
     CTLM.log("BEG on_init");
-    CTMLconfig.init();
-    CTMLgui.init();
+    CTML.config.init();
+
+    for _, player in pairs(game.players) do
+        CTLM.config.new_player(player)
+    end
+
+    CTML.gui.init();
     CTLM.load();
     CTLM.log("END on_init");
 end
 
 function CTML.load()
     CTLM.log("BEG on_load");
-    CTMLconfig.initConfig()
+    CTML.config.init()
+    CTML.gui.init()
     CTLM.log("END on_load");
 end
 
 function CTML.tick()
-    if game.speed > 3 or not CTLMconfig.enabled then
+    if game.speed > 3 or not CTLM.config.get("enabled") then
         return;
     end
 
-    if game.tick % (game.speed * CTLMconfig.screenshotInterval ) == 0 then
+    if game.tick % (game.speed * CTLM.config.get("screenshotInterval")) == 0 then
         --Time to loop through and take them screenshots!
         CTLM.log("Taking screenshots...");
         local screenshotTaken = false;
         for index, player in ipairs(game.players) do
-            if player.valid and player.connected and CTLMconfig.players[player.name] and CTLMconfig.players[player.name].enabled then
+            local configPlayer = CTLM.config.get_player(player.name);
+            if player.valid and player.connected and configPlayer and configPlayer.enabled then
                 screenshotTaken = true;
-                playerScreenshot(player.name);
+                CTLM.screenshotPlayer(configPlayer);
             end
         end
 
-        for index, position in ipairs(CTLMconfig.positions) do
-            if CTLMconfig.positions[index] and CTLMconfig.positions[index].enabled then
+        for index, position in ipairs(CTLM.config.get_positions()) do
+            if position.enabled then
                 screenshotTaken = true;
-                positionScreenshot(index);
-            end
-        end
-
-        for index, surface in pairs(game.surfaces) do
-            if surface.valid and CTLMconfig.surfaces[surface.name] and CTLMconfig.surfaces[surface.name].enabled then
-                screenshotTaken = true;
-                surfaceScreenshot(surface.name);
+                CTLM.screenshotPosition(position);
             end
         end
 
         if screenshotTaken then
-            CTLMconfig.screenshotNumber = CTLMconfig.screenshotNumber + 1;
+            CTLM.config.set("screenshotNumber", CTLM.config.get("screenshotNumber") + 1);
         end
     end
 end
@@ -65,68 +65,67 @@ end
 --Helper functions are the bees knees!
 --------------------------------------
 
+function CTLM.getPlayerByName(name)
+    for index, player in pairs(game.players) do
+        if player.name == name then
+            return player;
+        end
+    end
+    return nil;
+end
+
+
+--------------------------------------
 --screenshot functions!
-function CTML.playerScreenshot(index)
+--------------------------------------
+
+function CTML.screenshotPlayer(configPlayer)
+    local player = CTLM.getPlayerByName(configPlayer.name);
+    if not player then return nil end
+
     local currentTime = game.daytime;
-    if CTLMconfig.players[index].dayOnly then
+
+    if configPlayer.dayOnly then
         game.daytime = 0;
     end
 
     game.take_screenshot({
-        player = game.players[index],
-        resolution = { CTLMconfig.players[index].width, CTLMconfig.players[index].height },
-        zoom = CTLMconfig.players[index].zoom,
-        path = genFilename("player", game.players[index].name),
-        CTLMconfig.players[index].show_gui,
-        CTLMconfig.players[index].show_altinfo
+        player = player,
+        resolution = { configPlayer.width, configPlayer.height },
+        zoom = configPlayer.zoom,
+        path = genFilename("player", configPlayer.name),
+        configPlayer.show_gui,
+        configPlayer.show_altinfo
     });
 
     game.daytime = currentTime;
-    CTML.log("playerScreenshot: " .. game.players[index].name);
+    CTML.log("CTML.screenshotPlayer: " .. configPlayer.name);
 end
 
-function CTML.positionScreenshot(index)
+function CTML.screenshotPosition(configPosition)
     local currentTime = game.daytime;
-    if CTLMconfig.positions[index].dayOnly then
+
+    if configPosition.dayOnly then
         game.daytime = 0;
     end
 
     game.take_screenshot({
---        surface = game.surfaces[index],
-        position = { CTLMconfig.positions[index].positionX, CTLMconfig.positions[index].positionY },
-        resolution = { CTLMconfig.positions[index].width, CTLMconfig.positions[index].height },
-        zoom = CTLMconfig.positions[index].zoom,
-        path = genFilename("position", game.positions[index].name),
-        CTLMconfig.positions[index].show_gui,
-        CTLMconfig.positions[index].show_altinfo
+--        surface = game.surfaces[configPosition.surface],
+        position = { configPosition.positionX, configPosition.positionY },
+        resolution = { configPosition.width, configPosition.height },
+        zoom = configPosition.zoom,
+        path = genFilename("position", configPosition.name),
+        configPosition.show_gui,
+        configPosition.show_altinfo
     });
 
     game.daytime = currentTime;
-    CTML.log("positionScreenshot: " .. game.positions[index].name);
-end
-
---add*(index) functions
-function CTML.addPlayer(index)
-    if not CTLMconfig.players[index] then
-        CTLMconfig.players[index] = deepCopy(config_player_defaults);
-    end
-end
-
-function CTML.addPosition(index)
-    if not CTLMconfig.positions[index] then
-        CTLMconfig.positions[index] = deepCopy(config_position_defaults);
-    end
-end
-
-function CTML.addSurface(index)
-    if not CTLMconfig.surfaces[index] then
-        CTLMconfig.surfaces[index] = deepCopy(config_surface_defaults);
-    end
+    CTML.log("CTML.screenshotPosition: " .. configPosition.name);
 end
 
 --File name to save screenshot as
 function CTML.GenFilename(screenshotType, screenshotName)
-    return MOD_NAME .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", CTLMconfig.screenshotNumber) .. ".png";
+    return MOD_NAME .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", CTLM.config.get("screenshotNumber")) .. ".png";
 end
 
 function CTML.log(msg)
@@ -134,9 +133,9 @@ function CTML.log(msg)
         game.write_file(MOD_NAME .. "/debug.log", msg .. "\n", true);
 
         for index, player in ipairs(game.players) do
-            player.print(message)
+            player.print(msg)
         end
     else
-        error(serpent.dump(message, {compact = false, nocode = true, indent = ' '}))
+        error(serpent.dump(msg, {compact = false, nocode = true, indent = ' '}))
     end
 end

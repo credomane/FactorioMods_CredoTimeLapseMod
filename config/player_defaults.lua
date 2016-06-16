@@ -5,17 +5,18 @@
     I can't stop you though; so do what you want. :D
 ]]
 
-config_player_defaults = {};
+if not config then config = {} end
+if not config.player_defaults then config.player_defaults = {} end
 
-config_player_defaults.enabled = false;
+config.player_defaults.enabled = false;
 
 
-config_player_defaults.dayOnly = true;
+config.player_defaults.dayOnly = true;
 
-config_player_defaults.width = 1920;
-config_player_defaults.height = 1080;
-config_player_defaults.zoom = 1; -- zoom > 0; Zoom level is allowed to be a decimal. i.e. 0.12345
+config.player_defaults.width = 1920;
+config.player_defaults.height = 1080;
+config.player_defaults.zoom = 1; -- zoom > 0; Zoom level is allowed to be a decimal. i.e. 0.12345
 
-config_player_defaults.show_gui = false;
+config.player_defaults.show_gui = false;
 
-config_player_defaults.show_altinfo = false;
+config.player_defaults.show_altinfo = false;

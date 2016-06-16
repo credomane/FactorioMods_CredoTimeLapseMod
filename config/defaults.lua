@@ -5,19 +5,16 @@
     I can't stop you though; so do what you want. :D
 ]]
 
-config_defaults = {};
-config_defaults.players = {};
-config_defaults.positions = {};
+if not config then config = {} end
+if not config.defaults then config.defaults = {} end
 
-config_defaults.version = MOD_VERSION;
-
-config_defaults.enabled = false; -- Mod requires some basic config in gui first.
+config.defaults.enabled = false; -- Mod requires some basic config in gui first.
 
 -- saves to script-output/CTLM/<saveFolder>/
-config_defaults.saveFolder = "temp";
+config.defaults.saveFolder = "temp";
 
 -- Last number used for a screenshot to prevent overwriting older screenshots.
-config_defaults.screenshotNumber = 0;
+config.defaults.screenshotNumber = 0;
 
 --[[Approximately 5 minutes worth of game ticks.
     WARNING: mod will NOT take screenshots when game.speed is greater than 3!
@@ -32,4 +29,4 @@ config_defaults.screenshotNumber = 0;
     y=60; which is 60 seconds in a minute.
     z=60; which is 60 ticks in a second.
 ]]
-config_defaults.screenshotInterval = 18000;
+config.defaults.screenshotInterval = 18000;
