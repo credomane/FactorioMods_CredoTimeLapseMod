@@ -17,7 +17,7 @@ function CTLM.gui.click()
 end
 
 
-function CTML.gui.create_main_button(player)
+function CTLM.gui.create_main_button(player)
     local root = player.gui.top;
     if not root.CTLM_settings then
         root.add({
