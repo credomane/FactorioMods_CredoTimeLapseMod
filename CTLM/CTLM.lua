@@ -1,22 +1,27 @@
 
 --Factorio provided libs
-require "defines"
-require "util"
+require "defines";
+require "util";
 
 --CTLM libs
-require "CTLM.config"
-require "CTLM.gui"
+require "CTLM.config";
+require "CTLM.gui";
 
 if not CTLM then CTLM = {} end
 if not CTLM.config then CTLM.config = {} end
 if not CTLM.gui then CTLM.gui = {} end
 
+------------------------------------------------------------------------------------------------------
+--EVENT HANDLERS
+------------------------------------------------------------------------------------------------------
+
+--on_init()
 function CTLM.init()
     CTLM.log("BEG on_init");
     CTLM.config.init();
 
     for _, player in pairs(game.players) do
-        CTLM.config.new_player(player)
+        CTLM.config.new_player(player);
     end
 
     CTLM.gui.init();
@@ -24,19 +29,21 @@ function CTLM.init()
     CTLM.log("END on_init");
 end
 
+--on_load()
 function CTLM.load()
     CTLM.log("BEG on_load");
-    CTLM.config.init()
-    CTLM.gui.init()
+    CTLM.config.load();
+    CTLM.gui.load();
     CTLM.log("END on_load");
 end
 
+--on_tick()
 function CTLM.tick()
-    if game.speed > 3 or not CTLM.config.get("enabled") then
+    if game.speed > 3 or not CTLM.config.main.enabled then
         return;
     end
 
-    if game.tick % (game.speed * CTLM.config.get("screenshotInterval")) == 0 then
+    if game.tick % (game.speed * CTLM.config.main.screenshotInterval) == 0 then
         --Time to loop through and take them screenshots!
         CTLM.log("Taking screenshots...");
         local screenshotTaken = false;
@@ -56,9 +63,15 @@ function CTLM.tick()
         end
 
         if screenshotTaken then
-            CTLM.config.set("screenshotNumber", CTLM.config.get("screenshotNumber") + 1);
+            CTLM.config.set("screenshotNumber", CTLM.config.main.screenshotNumber + 1);
         end
     end
+end
+
+--on_player_created()
+function CTLM.player_created(event)
+    local player = game.get_player(event.player_index);
+    CTLM.config.new_player(player);
 end
 
 --------------------------------------
@@ -125,12 +138,12 @@ end
 
 --File name to save screenshot as
 function CTLM.GenFilename(screenshotType, screenshotName)
-    return MOD_NAME .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", CTLM.config.get("screenshotNumber")) .. ".png";
+    return MOD_NAME .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", CTLM.config.main.screenshotNumber) .. ".png";
 end
 
 function CTLM.log(msg)
     if type(msg) == "table" then
-        msg = "[" .. msg[1] .. "] [" .. msg[2] .. "]" .. msg[3];
+        msg = "[" .. msg[1] .. "] [" .. msg[2] .. "] " .. msg[3];
     end
 
     msg = "[CTLM] " .. msg;
