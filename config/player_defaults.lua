@@ -9,6 +9,7 @@ if not config then config = {} end
 if not config.player_defaults then config.player_defaults = {} end
 
 config.player_defaults.enabled = false;
+config.player_defaults.name = "temp";
 
 
 config.player_defaults.dayOnly = true;

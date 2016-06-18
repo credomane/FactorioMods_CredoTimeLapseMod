@@ -1,10 +1,11 @@
 {
-  "name": "CredoTimeLapseMod",
-  "version": "0.0.1",
-  "title": "Credo Time Lapse Mod",
-  "author": "Credomane",
-  "contact": "https://github.com/credomane",
-  "homepage": "https://github.com/credomane/CredoTimeLapseMod",
-  "description": "Takes screenshos of your world at specific intervals",
-  "dependencies": ["base >= 0.12.11"]
+    "name": "CredoTimeLapseMod",
+    "version": "0.0.1",
+    "title": "Credo Time Lapse Mod",
+    "author": "Credomane",
+    "contact": "https://github.com/credomane",
+    "homepage": "https://github.com/credomane/CredoTimeLapseMod",
+    "description": "Takes screenshos of your world at specific intervals",
+    "license": "MIT  https://opensource.org/licenses/MIT",
+    "dependencies": ["base >= 0.12.11"]
 }

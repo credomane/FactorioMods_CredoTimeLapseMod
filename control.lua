@@ -7,46 +7,29 @@ MOD_NAME = "CTLM";
 MOD_VERSION = "0.0.1";
 
 --CTLM libs
-require "CTLM.CTLM";
+require "CTLM.main";
+
+
+remote.add_interface(MOD_NAME, CTLM.remote)
 
 --Register event handlers! I'm lame and functions are named after their triggering event.
 script.on_init(CTLM.init);
-script.on_configuration_changed(CTLM.config.configuration_changed);
+script.on_configuration_changed(CTLM.configuration_changed);
 
-script.on_load(function()
-    local status, err = pcall(CTLM.load);
-    if err then
-        CTLM.log({"err_generic", "on_load", err});
-    end
-end);
+script.on_event(defines.events.on_gui_click, CTLM.gui_click);
+script.on_event(defines.events.on_player_created, CTLM.player_created);
+script.on_event(defines.events.on_tick, CTLM.tick);
 
-script.on_event(defines.events.on_player_created, function(event)
-    local status, err = pcall(CTLM.player_created, event);
-    if err then
-        CTLM.log({"err_generic", "on_player_created", err});
-    end
-end);
+--------------------------------------------------
+-----  Helper functions are the bees knees  ------
+--------------------------------------------------
 
-script.on_event(defines.events.on_tick, function(event)
-    local status, err = pcall(CTLM.tick, event);
-    if err then
-        CTLM.log({"err_generic", "on_tick", err});
-    end
-end);
+-- Shamelessly copied from http://lua-users.org/wiki/StringRecipes
+function string.starts(String,Start)
+   return string.sub(String,1,string.len(Start))==Start
+end
 
-script.on_event(defines.events.on_gui_click, function(event)
-    CTLM.log("Gui element was clicked [" .. event.element.name .. "].");
-    if not string.starts_with(event.element.name, "CTLM_") then
-        return;
-    end
-
-    local status, err = pcall(CTLM.gui.click, event);
-
-    if err then
-        if event.element.valid then
-            CTLM.log({"err_specific", "on_gui_click", event.element.name, err});
-        else
-            CTLM.log({"err_generic", "on_gui_click", err});
-        end
-    end
-end);
+-- Shamelessly copied from http://lua-users.org/wiki/StringRecipes
+function string.ends(String,End)
+   return End=='' or string.sub(String,-string.len(End))==End
+end
