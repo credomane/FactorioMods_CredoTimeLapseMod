@@ -29,4 +29,4 @@ config.defaults.screenshotNumber = 0;
     y=60; which is 60 seconds in a minute.
     z=60; which is 60 ticks in a second.
 ]]
-config.defaults.screenshotInterval = 600;
+config.defaults.screenshotInterval = 18000;
