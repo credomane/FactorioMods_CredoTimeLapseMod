@@ -90,17 +90,21 @@ function CTLM.gui.click(event)
 
     --PLAYERS SETTINGS
     elseif event.element.name == "CTLM_settings_players_open" then
+        CTLM.gui.CTLM_settings_main_close(event);
         CTLM.gui.CTLM_settings_players_open(event);
     elseif event.element.name == "CTLM_settings_players_close" then
         CTLM.gui.CTLM_settings_players_close(event);
+        CTLM.gui.CTLM_settings_main_open(event);
     elseif event.element.name == "CTLM_settings_players_save" then
         CTLM.gui.CTLM_settings_players_save(event);
 
     --POSITIONS SETTINGS
     elseif event.element.name == "CTLM_settings_positions_open" then
+        CTLM.gui.CTLM_settings_main_close(event);
         CTLM.gui.CTLM_settings_positions_open(event);
     elseif event.element.name == "CTLM_settings_positions_close" then
         CTLM.gui.CTLM_settings_positions_close(event);
+        CTLM.gui.CTLM_settings_main_open(event);
     elseif event.element.name == "CTLM_settings_positions_save" then
         CTLM.gui.CTLM_settings_positions_save(event);
     end
