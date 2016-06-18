@@ -173,6 +173,10 @@ function CTLM.screenshotPosition(configPosition)
     CTLM.log("CTLM.screenshotPosition: " .. configPosition.name);
 end
 
+--------------------------------------
+--Helper functions!
+--------------------------------------
+
 --File name to save screenshot as
 function CTLM.GenFilename(screenshotType, screenshotName)
     CTLM.log("[main] GenFilename(" .. MOD_NAME .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", global.config.screenshotNumber) .. ".png" .. ")");
@@ -195,10 +199,6 @@ function CTLM.log(msg)
     end
 end
 
---------------------------------------
---Helper functions!
---------------------------------------
-
 function CTLM.hardreset()
     global.config = nil;
     global.players = nil;
@@ -215,7 +215,7 @@ function CTLM.new_player(player)
         player = game.get_player(player);
     end
 
-    CTLM.log("[config] new_player(" .. player.name .. ")");
+    CTLM.log("[main] new_player(" .. player.name .. ")");
 
     if not global.players[player.name] then
         global.players[player.name] = CTLM.deepCopy(config.player_defaults);
@@ -225,7 +225,7 @@ function CTLM.new_player(player)
 end
 
 function CTLM.new_position(position)
-    CTLM.log("[config] new_position()");
+    CTLM.log("[main] new_position()");
     if type(position) ~= "table" then
         CTLM.log("Invalid position type given as parameter '" .. type(position) .. "'.");
         return false;
