@@ -42,6 +42,8 @@ function CTLM.gui.hardreset()
             player.gui.top.CTLM_mainbutton.destroy();
         end
     end
+
+    CTLM.gui.init();
 end
 
 function CTLM.gui.new_player(player)

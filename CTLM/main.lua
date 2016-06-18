@@ -70,23 +70,31 @@ end
 
 --on_tick()
 function CTLM.tick()
+    local curTick = game.tick;
+    --I really dislike my mod being the left most and pushing evoGUI over.
+    -- So this is my fugly hack. :(
+    -- Wish mods could specify a sorting order between 1 and 100!
+    if curTick == 2 then
+        CTLM.gui.hardreset();
+    end
+
     if game.speed > 3 or not global.config.enabled then
         return;
     end
 
-    if game.tick % (game.speed * global.config.screenshotInterval) == 0 then
+    if curTick % global.config.screenshotInterval == 0 then
         --Time to loop through and take them screenshots!
         CTLM.log("Taking screenshots...");
         local screenshotTaken = false;
         for index, player in ipairs(game.players) do
-            local configPlayer = CTLM.config.get_player(player.name);
+            local configPlayer = global.players[player.name];
             if player.valid and player.connected and configPlayer and configPlayer.enabled then
                 screenshotTaken = true;
                 CTLM.screenshotPlayer(configPlayer);
             end
         end
 
-        for index, position in ipairs(CTLM.config.get_positions()) do
+        for index, position in ipairs(global.positions) do
             if position.enabled then
                 screenshotTaken = true;
                 CTLM.screenshotPosition(position);
