@@ -77,14 +77,18 @@ function CTLM.gui.create_main_button(player)
     end
 end
 
+
+--By the code this is horrid. Why doesn't the Factorio API allow registering a callback handler directly in the GUI.add function!
 function CTLM.gui.click(event)
     CTLM.log("[gui] click()");
 
     --MAIN SETTINGS
     if event.element.name == "CTLM_mainbutton" then
-        CTLM.gui.CTLM_settings_main_open(event);
         CTLM.gui.CTLM_settings_players_close(event);
+        CTLM.gui.CTLM_settings_playerEdit_close(event);
         CTLM.gui.CTLM_settings_positions_close(event);
+        CTLM.gui.CTLM_settings_positionEdit_close(event);
+        CTLM.gui.CTLM_settings_main_open(event);
     elseif event.element.name == "CTLM_settings_main_close" then
         CTLM.gui.CTLM_settings_main_close(event);
     elseif event.element.name == "CTLM_settings_main_save" then
@@ -96,9 +100,18 @@ function CTLM.gui.click(event)
         CTLM.gui.CTLM_settings_players_open(event);
     elseif event.element.name == "CTLM_settings_players_close" then
         CTLM.gui.CTLM_settings_players_close(event);
+        CTLM.gui.CTLM_settings_playerEdit_close(event);
         CTLM.gui.CTLM_settings_main_open(event);
-    elseif event.element.name == "CTLM_settings_players_save" then
-        CTLM.gui.CTLM_settings_players_save(event);
+
+    --PLAYER EDIT SETTINGS
+    elseif string.starts(event.element.name, "CTLM_settings_playerEdit_open") then
+        CTLM.gui.CTLM_settings_playerEdit_open(event);
+        CTLM.gui.CTLM_settings_players_open(event);
+    elseif string.starts(event.element.name, "CTLM_settings_playerEdit_close") then
+        CTLM.gui.CTLM_settings_playerEdit_close(event);
+    elseif string.starts(event.element.name, "CTLM_settings_playerEdit_save") then
+        CTLM.gui.CTLM_settings_playerEdit_save(event);
+        CTLM.gui.CTLM_settings_playerEdit_close(event);
 
     --POSITIONS SETTINGS
     elseif event.element.name == "CTLM_settings_positions_open" then
@@ -106,8 +119,24 @@ function CTLM.gui.click(event)
         CTLM.gui.CTLM_settings_positions_open(event);
     elseif event.element.name == "CTLM_settings_positions_close" then
         CTLM.gui.CTLM_settings_positions_close(event);
+        CTLM.gui.CTLM_settings_positionEdit_close(event);
         CTLM.gui.CTLM_settings_main_open(event);
-    elseif event.element.name == "CTLM_settings_positions_save" then
-        CTLM.gui.CTLM_settings_positions_save(event);
+    elseif event.element.name == "CTLM_settings_positions_add" then
+        CTLM.gui.CTLM_settings_positions_add(event);
+
+    --PLAYER EDIT SETTINGS
+    elseif string.starts(event.element.name, "CTLM_settings_positionEdit_open") then
+        CTLM.gui.CTLM_settings_main_close(event);
+        CTLM.gui.CTLM_settings_positionEdit_open(event);
+    elseif string.starts(event.element.name, "CTLM_settings_positionEdit_close") then
+        CTLM.gui.CTLM_settings_positionEdit_close(event);
+    elseif string.starts(event.element.name, "CTLM_settings_positionEdit_save") then
+        CTLM.gui.CTLM_settings_positionEdit_save(event);
+        CTLM.gui.CTLM_settings_positionEdit_close(event);
+    elseif string.starts(event.element.name, "CTLM_settings_positionEdit_delete") then
+        CTLM.gui.CTLM_settings_positionEdit_delete(event);
+        CTLM.gui.CTLM_settings_positionEdit_close(event);
+        CTLM.gui.CTLM_settings_positions_close(event);
+        CTLM.gui.CTLM_settings_positions_open(event);
     end
 end
