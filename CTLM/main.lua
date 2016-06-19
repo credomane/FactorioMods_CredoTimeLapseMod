@@ -104,6 +104,10 @@ function CTLM.tick()
         local screenshotTaken = false;
         for index, player in ipairs(game.players) do
             local configPlayer = global.players[player.name];
+            CTLM.log("player.valid" .. tostring(player.valid));
+            CTLM.log("player.connected" .. tostring(player.connected));
+            CTLM.log("configPlayer" .. tostring(configPlayer));
+            CTLM.log("configPlayer.enabled" .. tostring(configPlayer.enabled));
             if player.valid and player.connected and configPlayer and configPlayer.enabled then
                 screenshotTaken = true;
                 CTLM.screenshotPlayer(configPlayer);
@@ -129,7 +133,7 @@ end
 
 function CTLM.screenshotPlayer(configPlayer)
     CTLM.log("[main] screenshotPlayer("  .. configPlayer.Name .. ")");
-    local player = CTLM.getPlayerByName(configPlayer.name);
+    local player = game.get_player(configPlayer.name);
     if not player then return nil end
 
     local currentTime = game.daytime;
@@ -143,8 +147,8 @@ function CTLM.screenshotPlayer(configPlayer)
         resolution = { configPlayer.width, configPlayer.height },
         zoom = configPlayer.zoom,
         path = genFilename("player", configPlayer.name),
-        configPlayer.show_gui,
-        configPlayer.show_altinfo
+        configPlayer.showGui,
+        configPlayer.showAltInfo
     });
 
     game.daytime = currentTime;
@@ -165,8 +169,8 @@ function CTLM.screenshotPosition(configPosition)
         resolution = { configPosition.width, configPosition.height },
         zoom = configPosition.zoom,
         path = genFilename("position", configPosition.name),
-        configPosition.show_gui,
-        configPosition.show_altinfo
+        configPosition.showGui,
+        configPosition.showAltInfo
     });
 
     game.daytime = currentTime;
@@ -208,40 +212,23 @@ function CTLM.hardreset()
     CTLM.gui.hardreset()
 end
 
-
-function CTLM.new_player(player)
-    if type(player) == "string" or type(player) == "integer" then
-        --Probably an index or name of a player. Get the player from the game variable.
-        player = game.get_player(player);
+function CTLM.getPlayerName(player)
+    local playerName = "";
+    if not player.name or player.name == "" then
+        playerName = "UnnamedPlayer " .. player.index;
+    else
+        playerName = player.name;
     end
-
-    CTLM.log("[main] new_player(" .. player.name .. ")");
-
-    if not global.players[player.name] then
-        global.players[player.name] = CTLM.deepCopy(config.player_defaults);
-        --Stored for when we just pass around a lua table of this player with out the proceeding named index.
-        global.players[player.name].name = player.name;
-    end
+    return playerName;
 end
 
-function CTLM.new_position(position)
-    CTLM.log("[main] new_position()");
-    if type(position) ~= "table" then
-        CTLM.log("Invalid position type given as parameter '" .. type(position) .. "'.");
-        return false;
-    elseif type(position) == "table" and not position.name then
-        CTLM.log("position table is not valid.");
-        return false;
-    end
+function CTLM.new_player(player)
+    local playerName = CTLM.getPlayerName(player);
+    CTLM.log("[main] new_player(" .. playerName .. ")");
 
-    if not global.positions[position.name] then
-        global.positions[position.name] = CTLM.deepCopy(config.position_defaults);
-        --Stored for when we just pass around a lua table of this position with out the proceeding named index.
-        global.positions[position.name].name = position.name;
-    end
-
-    for key,value in pairs(position) do
-        global.positions[position.name][key] = value;
+    if not global.players[player.index] then
+        global.players[player.index] = CTLM.deepCopy(config.player_defaults);
+        global.players[player.index].name =  playerName;
     end
 end
 
