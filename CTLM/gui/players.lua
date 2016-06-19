@@ -33,9 +33,44 @@ if not CTLM.gui then CTLM.gui = {} end
 function CTLM.gui.CTLM_settings_players_open(event)
     local player = game.get_player(event.player_index);
     if player.gui.center.CTLM_settings_players ~= nil then
-        --Open button has been hit twice. Perform close action instead.
-        CTLM.gui.CTLM_settings_players_close(event);
         return;
+    end
+
+    --root frame
+    local rootFrame = player.gui.center.add({
+        type="frame",
+        direction="vertical",
+        name="CTLM_settings_players",
+        caption={"settings.players.title"}
+    });
+
+    --players frame buttons
+    local buttons = rootFrame.add({type="flow", name="buttons", direction="horizontal"});
+    buttons.style.minimal_width = 500;
+    buttons.style.maximal_width = 1000;
+    buttons.add({type="button", name="CTLM_settings_players_close", caption={"settings.close"}});
+
+    --main frame
+    local mainFrame = rootFrame.add({
+        type="frame",
+        name="main",
+        direction="vertical",
+        caption={"settings.players.header"},
+        style="naked_frame_style"
+    });
+
+    local playerName = "";
+    for index, player in pairs(game.players) do
+        if not player.name or player.name == "" then
+            playerName = "UnnamedPlayer" .. player.index;
+        else
+            playerName = player.name;
+        end
+        if not global.players[playerName] then
+            global.players[playerName] = CTLM.deepCopy(config.player_defaults);
+        end
+
+        mainFrame.add({type="button", name="CTLM_settings_player_button_" .. playerName, caption=playerName});
     end
 end
 

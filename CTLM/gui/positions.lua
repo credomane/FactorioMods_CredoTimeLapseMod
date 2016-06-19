@@ -33,9 +33,35 @@ if not CTLM.gui then CTLM.gui = {} end
 function CTLM.gui.CTLM_settings_positions_open(event)
     local player = game.get_player(event.player_index);
     if player.gui.center.CTLM_settings_positions ~= nil then
-        --Open button has been hit twice. Perform close action instead.
-        CTLM.gui.CTLM_settings_positions_close(event);
         return;
+    end
+
+    --root frame
+    local rootFrame = player.gui.center.add({
+        type="frame",
+        direction="vertical",
+        name="CTLM_settings_positions",
+        caption={"settings.positions.title"}
+    });
+
+    --root frame buttons
+    local buttons = rootFrame.add({type="flow", name="buttons", direction="horizontal"});
+    buttons.style.minimal_width = 500;
+    buttons.style.maximal_width = 1000;
+    buttons.add({type="button", name="CTLM_settings_positions_close", caption={"settings.close"}});
+    buttons.add({type="button", name="CTLM_settings_positions_add", caption={"settings.positions.add"}});
+
+    --main frame
+    local mainFrame = rootFrame.add({
+        type="frame",
+        name="main",
+        direction="vertical",
+        caption={"settings.positions.header"},
+        style="naked_frame_style"
+    });
+
+    for index, position in pairs(global.positions) do
+        mainFrame.add({type="button", name="CTLM_settings_player_button_" .. position.name, caption=position.name});
     end
 end
 
