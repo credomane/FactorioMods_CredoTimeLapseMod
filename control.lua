@@ -47,11 +47,19 @@ script.on_event(defines.events.on_tick, CTLM.tick);
 --------------------------------------------------
 
 -- Shamelessly copied from http://lua-users.org/wiki/StringRecipes
-function string.starts(String,Start)
-   return string.sub(String,1,string.len(Start))==Start
+function string.starts(String, Start)
+   return string.sub(String, 1, string.len(Start)) == Start;
 end
 
 -- Shamelessly copied from http://lua-users.org/wiki/StringRecipes
-function string.ends(String,End)
-   return End=='' or string.sub(String,-string.len(End))==End
+function string.ends(String, End)
+   return End=='' or string.sub(String, -string.len(End)) == End;
+end
+
+function string.trimStart(String, trim)
+    return string.sub(String, string.len(trim)+1);
+end
+
+function string.trimEnd(String, trim)
+    return string.sub(String, 1, string.len(String)-string.len(trim));
 end
