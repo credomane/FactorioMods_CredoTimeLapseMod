@@ -64,27 +64,31 @@ function CTLM.gui.CTLM_settings_main_open(event)
     local saveFolder_flow = mainFrame.add({type="flow", name="saveFolder_flow", direction="horizontal"});
     saveFolder_flow.add({type="label", caption={"settings.main.savefolder_left"}});
     local textfield = saveFolder_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
-    textfield.text=tostring(global.config.saveFolder);
+    textfield.text=global.config.saveFolder;
     textfield.style.minimal_width = 250;
     textfield.style.maximal_width = 250;
-    --[end] Main frame -> screenshotInterval setting
+    --[end] Main frame -> saveFolder setting
 
     --[beg] Main frame -> screenshotInterval setting
     local screenshotInterval_flow = mainFrame.add({type="flow", name="screenshotInterval_flow", direction="horizontal"});
     screenshotInterval_flow.add({type="label", caption={"settings.main.screenshotInterval_left"}});
     local textfield = screenshotInterval_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
-    textfield.text=tostring(global.config.screenshotInterval);
+    textfield.text=global.config.screenshotInterval;
     screenshotInterval_flow.add({type="label", caption={"settings.main.screenshotInterval_right"}});
     --[end] Main frame -> screenshotInterval setting
 
     --Main frame screenshot buttons
     local ssButtons_flow = mainFrame.add({type="flow", name="ssButtons_flow", direction="horizontal"});
     local ssButtons = ssButtons_flow.add({type="flow", name="ssbuttons", direction="horizontal"});
+    ssButtons.style.minimal_width = 500;
+    ssButtons.style.maximal_width = 1000;
     ssButtons.add({type="button", name="CTLM_settings_players_open", caption={"settings.players"}});
     ssButtons.add({type="button", name="CTLM_settings_positions_open", caption={"settings.positions"}});
 
-    --Main frame buttons
+    --root frame buttons
     local buttons = rootFrame.add({type="flow", name="buttons", direction="horizontal"});
+    buttons.style.minimal_width = 500;
+    buttons.style.maximal_width = 1000;
     buttons.add({type="button", name="CTLM_settings_main_close", caption={"settings.close"}});
     buttons.add({type="button", name="CTLM_settings_main_save", caption={"settings.save"}});
 end
@@ -100,7 +104,7 @@ function CTLM.gui.CTLM_settings_main_save(event)
     local player = game.get_player(event.player_index);
 
     local enabled = player.gui.center.CTLM_settings_main.mainFrame.enabled_flow.checkbox.state;
-    local saveFolder = tostring(player.gui.center.CTLM_settings_main.mainFrame.saveFolder_flow.textfield.text);
+    local saveFolder = player.gui.center.CTLM_settings_main.mainFrame.saveFolder_flow.textfield.text;
     local screenshotInterval = tonumber(player.gui.center.CTLM_settings_main.mainFrame.screenshotInterval_flow.textfield.text);
 
     if enabled ~= global.config.enabled then
@@ -108,11 +112,11 @@ function CTLM.gui.CTLM_settings_main_save(event)
         global.config.enabled = enabled;
     end
     if saveFolder ~= nil then
-        CTLM.log("[gui] new saveFolder " .. tostring(saveFolder));
+        CTLM.log("[gui] new saveFolder " .. saveFolder);
         global.config.saveFolder = saveFolder;
     end
     if screenshotInterval ~= nil then
-        CTLM.log("[gui] new screenshotInterval " .. tostring(screenshotInterval));
+        CTLM.log("[gui] new screenshotInterval " .. screenshotInterval);
         global.config.screenshotInterval = screenshotInterval;
     end
 end
