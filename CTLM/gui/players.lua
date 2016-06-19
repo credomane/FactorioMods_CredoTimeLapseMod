@@ -199,7 +199,7 @@ end
 function CTLM.gui.CTLM_settings_playerEdit_save(event)
     local player = game.get_player(event.player_index);
     local PlayerEditFrame = player.gui.center.CTLM_settings_playerEdit.main;
-    local playerEditIndex = tonumber(PlayerEditFrame.index_flow.index.text);
+    local playerEditIndex = tonumber(PlayerEditFrame.index_flow.index.caption);
     local enabled = PlayerEditFrame.enabled_flow.checkbox.state;
     local dayOnly = PlayerEditFrame.dayOnly_flow.checkbox.state;
     local width = tonumber(PlayerEditFrame.width_flow.textfield.text);
@@ -208,7 +208,6 @@ function CTLM.gui.CTLM_settings_playerEdit_save(event)
     local showGui = PlayerEditFrame.showGui_flow.checkbox.state;
     local showAltInfo = PlayerEditFrame.showAltInfo_flow.checkbox.state;
 
-    local playerEditPlayer = game.get_player(playerEditName);
     global.players[playerEditIndex].enabled = enabled;
     global.players[playerEditIndex].dayOnly = dayOnly;
     global.players[playerEditIndex].width = width;

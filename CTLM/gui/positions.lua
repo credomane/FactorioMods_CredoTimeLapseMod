@@ -92,6 +92,7 @@ function CTLM.gui.CTLM_settings_positions_close(event)
 end
 
 function CTLM.gui.CTLM_settings_positions_add(event)
+    local player = game.get_player(event.player_index);
     global.config.lastPosition = global.config.lastPosition + 1;
     local positionIndex = global.config.lastPosition;
     local positionName = "New Position " .. positionIndex;
@@ -280,7 +281,7 @@ end
 function CTLM.gui.CTLM_settings_positionEdit_save(event)
     local player = game.get_player(event.player_index);
     local positionEditFrame = player.gui.center.CTLM_settings_positionEdit.main;
-    local positionKey = tonumber(positionEditFrame.index_flow.index.text);
+    local positionKey = tonumber(positionEditFrame.index_flow.index.caption);
     local enabled = positionEditFrame.enabled_flow.checkbox.state;
     local name = positionEditFrame.name_flow.textfield.text;
     local surface = positionEditFrame.surface_flow.textfield.text;
@@ -306,7 +307,6 @@ function CTLM.gui.CTLM_settings_positionEdit_save(event)
     global.positions[positionKey].showAltInfo = showAltInfo;
 
     player.print("[CTLM] Position " .. name .. " saved.");
-    player.print("[CTLM] dayonly is " .. tostring(dayOnly));
 end
 
 function CTLM.gui.CTLM_settings_positionEdit_delete(event)
