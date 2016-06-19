@@ -107,6 +107,7 @@ function CTLM.gui.CTLM_settings_positions_add(event)
     CTLM.gui.CTLM_settings_positions_close(event);
     CTLM.gui.CTLM_settings_positions_open(event);
     CTLM.gui.CTLM_settings_positionEdit_open(fakeEvent);
+    player.print("[CTLM] New position added. Please configure it.");
 end
 
 ------------------------------------------------------------------------------------------------------
@@ -133,9 +134,17 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
         type="frame",
         name="main",
         direction="vertical",
-        caption=positionKey,
+        caption=global.positions[positionKey].name,
         style="naked_frame_style"
     });
+
+    --[beg] Main frame -> player index Label
+    local index_flow = mainFrame.add({type="flow", name="index_flow", direction="horizontal"});
+    index_flow.style.minimal_width = 250;
+    index_flow.style.maximal_width = 750;
+    index_flow.add({type="label", name="text", caption={"settings.positionEdit.indexLabel"}});
+    index_flow.add({type="label", name="index", caption=positionKey});
+    --[end] Main frame -> player enabled setting
 
     --[beg] Main frame -> player enabled setting
     local enabled_flow = mainFrame.add({type="flow", name="enabled_flow", direction="horizontal"});
@@ -246,12 +255,19 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     buttons.style.maximal_width = 1000;
     buttons.add({type="button", name="CTLM_settings_positionEdit_close", caption={"settings.cancel"}});
     buttons.add({type="button", name="CTLM_settings_positionEdit_save", caption={"settings.save"}});
-    local button_flow = buttons.add({type="flow", name="CTLM_settings_positionEdit_button_flow"});
-    button_flow.style.minimal_width = 50;
-    button_flow.style.maximal_width = 50;
+
+    local button_spacer1 = buttons.add({type="flow", name="CTLM_settings_positionEdit_spacer1"});
+    button_spacer1.style.minimal_width = 50;
+    button_spacer1.style.maximal_width = 50;
+
+    buttons.add({type="button", name="CTLM_settings_positionEdit_playerPos", caption={"settings.positionEdit.playerPos"}});
+
+    local button_spacer2 = buttons.add({type="flow", name="CTLM_settings_positionEdit_spacer2"});
+    button_spacer2.style.minimal_width = 50;
+    button_spacer2.style.maximal_width = 50;
+
     local buttonDelete = buttons.add({type="button", name="CTLM_settings_positionEdit_delete_" .. positionKey, caption={"settings.delete"}});
     buttonDelete.style.font_color = {r=1};
-
 end
 
 function CTLM.gui.CTLM_settings_positionEdit_close(event)
@@ -264,7 +280,7 @@ end
 function CTLM.gui.CTLM_settings_positionEdit_save(event)
     local player = game.get_player(event.player_index);
     local positionEditFrame = player.gui.center.CTLM_settings_positionEdit.main;
-    local positionKey = tonumber(positionEditFrame.caption);
+    local positionKey = tonumber(positionEditFrame.index_flow.index.text);
     local enabled = positionEditFrame.enabled_flow.checkbox.state;
     local name = positionEditFrame.name_flow.textfield.text;
     local surface = positionEditFrame.surface_flow.textfield.text;
@@ -288,6 +304,9 @@ function CTLM.gui.CTLM_settings_positionEdit_save(event)
     global.positions[positionKey].positionY = positionY;
     global.positions[positionKey].showGui = showGui;
     global.positions[positionKey].showAltInfo = showAltInfo;
+
+    player.print("[CTLM] Position " .. name .. " saved.");
+    player.print("[CTLM] dayonly is " .. tostring(dayOnly));
 end
 
 function CTLM.gui.CTLM_settings_positionEdit_delete(event)
@@ -296,4 +315,13 @@ function CTLM.gui.CTLM_settings_positionEdit_delete(event)
     local positionKey = tonumber(positionEditFrame.caption);
 
     global.positions[positionKey] = nil;
+    player.print("[CTLM] Position " .. name .. " deleted.");
+end
+
+function CTLM.gui.CTLM_settings_positionEdit_playerPos(event)
+    local player = game.get_player(event.player_index);
+    local positionEditFrame = player.gui.center.CTLM_settings_positionEdit.main;
+    positionEditFrame.positionX_flow.textfield.text=tonumber(string.format("%.2f", player.position.x));
+    positionEditFrame.positionY_flow.textfield.text=tonumber(string.format("%.2f", player.position.x));
+    
 end

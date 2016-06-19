@@ -116,4 +116,6 @@ function CTLM.gui.CTLM_settings_main_save(event)
     if screenshotInterval ~= nil then
         global.config.screenshotInterval = screenshotInterval;
     end
+
+    player.print("[CTLM] Core settings updated.");
 end

@@ -135,5 +135,7 @@ function CTLM.gui.click(event)
         CTLM.gui.CTLM_settings_positionEdit_close(event);
         CTLM.gui.CTLM_settings_positions_close(event);
         CTLM.gui.CTLM_settings_positions_open(event);
+    elseif string.starts(event.element.name, "CTLM_settings_positionEdit_playerPos") then
+        CTLM.gui.CTLM_settings_positionEdit_playerPos(event);
     end
 end
