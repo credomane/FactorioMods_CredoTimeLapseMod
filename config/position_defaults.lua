@@ -21,6 +21,6 @@ config.position_defaults.zoom = 0.65; -- zoom > 0; Zoom level is allowed to be a
 config.position_defaults.positionX = 0;
 config.position_defaults.positionY = 0;
 
-config.position_defaults.show_gui = false;
-config.position_defaults.show_altinfo = true;
+config.position_defaults.showGui = false;
+config.position_defaults.showAltInfo = true;
 

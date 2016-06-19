@@ -18,6 +18,6 @@ config.player_defaults.width = 1920;
 config.player_defaults.height = 1080;
 config.player_defaults.zoom = 1; -- zoom > 0; Zoom level is allowed to be a decimal. i.e. 0.12345
 
-config.player_defaults.show_gui = false;
+config.player_defaults.showGui = false;
 
-config.player_defaults.show_altinfo = false;
+config.player_defaults.showAltInfo = false;
