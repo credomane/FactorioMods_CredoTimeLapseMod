@@ -133,6 +133,8 @@ function CTLM.gui.click(event)
     elseif string.starts(event.element.name, "CTLM_settings_positionEdit_save") then
         CTLM.gui.CTLM_settings_positionEdit_save(event);
         CTLM.gui.CTLM_settings_positionEdit_close(event);
+        CTLM.gui.CTLM_settings_positions_close(event);
+        CTLM.gui.CTLM_settings_positions_open(event);
     elseif string.starts(event.element.name, "CTLM_settings_positionEdit_delete") then
         CTLM.gui.CTLM_settings_positionEdit_delete(event);
         CTLM.gui.CTLM_settings_positionEdit_close(event);
