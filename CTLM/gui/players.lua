@@ -79,6 +79,7 @@ function CTLM.gui.CTLM_settings_players_open(event)
 
         if not global.players[player.index] then
             global.players[player.index] = CTLM.deepCopy(config.player_defaults);
+            global.players[player.index].name = playerName;
         end
 
         subFrame.add({type="button", name="CTLM_settings_playerEdit_open_" .. player.index, caption=playerName});
@@ -133,19 +134,19 @@ function CTLM.gui.CTLM_settings_playerEdit_open(event)
 
     --[beg] Main frame -> player enabled setting
     local enabled_flow = mainFrame.add({type="flow", name="enabled_flow", direction="horizontal"});
-    enabled_flow.add({type="checkbox", name="checkbox", caption={"settings.playerEdit.enabled"}, state=global.players[playerEditName].enabled});
+    enabled_flow.add({type="checkbox", name="checkbox", caption={"settings.playerEdit.enabled"}, state=global.players[player.index].enabled});
     --[end] Main frame -> player enabled setting
 
     --[beg] Main frame -> dayOnly setting
     local dayOnly_flow = mainFrame.add({type="flow", name="dayOnly_flow", direction="horizontal"});
-    dayOnly_flow.add({type="checkbox", name="checkbox", caption={"settings.playerEdit.dayOnly"}, state=global.players[playerEditName].dayOnly});
+    dayOnly_flow.add({type="checkbox", name="checkbox", caption={"settings.playerEdit.dayOnly"}, state=global.players[player.index].dayOnly});
     --[end] Main frame -> dayOnly setting
 
     --[beg] Main frame -> width setting
     local width_flow = mainFrame.add({type="flow", name="width_flow", direction="horizontal"});
     width_flow.add({type="label", caption={"settings.playerEdit.width"}});
     local textfield = width_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
-    textfield.text=global.players[playerEditName].width;
+    textfield.text=global.players[player.index].width;
     textfield.style.minimal_width = 50;
     textfield.style.maximal_width = 50;
     --[end] Main frame -> width setting
@@ -154,7 +155,7 @@ function CTLM.gui.CTLM_settings_playerEdit_open(event)
     local height_flow = mainFrame.add({type="flow", name="height_flow", direction="horizontal"});
     height_flow.add({type="label", caption={"settings.playerEdit.height"}});
     local textfield = height_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
-    textfield.text=global.players[playerEditName].height;
+    textfield.text=global.players[player.index].height;
     textfield.style.minimal_width = 50;
     textfield.style.maximal_width = 50;
     --[end] Main frame -> height setting
@@ -163,19 +164,19 @@ function CTLM.gui.CTLM_settings_playerEdit_open(event)
     local zoom_flow = mainFrame.add({type="flow", name="zoom_flow", direction="horizontal"});
     zoom_flow.add({type="label", caption={"settings.playerEdit.zoom"}});
     local textfield = zoom_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
-    textfield.text=global.players[playerEditName].zoom;
+    textfield.text=global.players[player.index].zoom;
     textfield.style.minimal_width = 50;
     textfield.style.maximal_width = 50;
     --[end] Main frame -> zoom setting
 
     --[beg] Main frame -> showGui setting
     local showGui_flow = mainFrame.add({type="flow", name="showGui_flow", direction="horizontal"});
-    showGui_flow.add({type="checkbox", name="checkbox", caption={"settings.playerEdit.showGui"}, state=global.players[playerEditName].showGui});
+    showGui_flow.add({type="checkbox", name="checkbox", caption={"settings.playerEdit.showGui"}, state=global.players[player.index].showGui});
     --[end] Main frame -> showGui setting
 
     --[beg] Main frame -> showAltInfo setting
     local showAltInfo_flow = mainFrame.add({type="flow", name="showAltInfo_flow", direction="horizontal"});
-    showAltInfo_flow.add({type="checkbox", name="checkbox", caption={"settings.playerEdit.showAltInfo"}, state=global.players[playerEditName].showAltInfo});
+    showAltInfo_flow.add({type="checkbox", name="checkbox", caption={"settings.playerEdit.showAltInfo"}, state=global.players[player.index].showAltInfo});
     --[end] Main frame -> showAltInfo setting
 
     --Main frame buttons
@@ -215,11 +216,12 @@ function CTLM.gui.CTLM_settings_playerEdit_save(event)
     CTLM.log("showGui:" .. tostring(showGui));
     CTLM.log("showAltInfo:" .. tostring(showAltInfo));
 
-    global.players[playerEditName].enabled = enabled;
-    global.players[playerEditName].dayOnly = dayOnly;
-    global.players[playerEditName].width = width;
-    global.players[playerEditName].height = height;
-    global.players[playerEditName].zoom = zoom;
-    global.players[playerEditName].showGui = showGui;
-    global.players[playerEditName].showAltInfo = showAltInfo;
+    local playerEditPlayer = game.get_player(playerEditName);
+    global.players[player.index].enabled = enabled;
+    global.players[player.index].dayOnly = dayOnly;
+    global.players[player.index].width = width;
+    global.players[player.index].height = height;
+    global.players[player.index].zoom = zoom;
+    global.players[player.index].showGui = showGui;
+    global.players[player.index].showAltInfo = showAltInfo;
 end

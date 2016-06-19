@@ -51,8 +51,8 @@ function CTLM.gui.hardreset()
     CTLM.gui.init();
 end
 
-function CTLM.gui.new_player(player)
-    CTLM.log("[gui] new_player(" .. player.name .. ")");
+function CTLM.gui.newPlayer(player)
+    CTLM.log("[gui] newPlayer(" .. player.name .. ")");
     CTLM.gui.create_main_button(player);
 end
 

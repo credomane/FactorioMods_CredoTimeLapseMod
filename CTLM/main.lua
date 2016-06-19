@@ -77,8 +77,8 @@ function CTLM.player_created(event)
     CTLM.log("[main] player_created(" .. event.player_index .. ")");
     local player = game.get_player(event.player_index);
     if player.valid then
-        CTLM.new_player(player);
-        CTLM.gui.new_player(player);
+        CTLM.newPlayer(player);
+        CTLM.gui.newPlayer(player);
     else
         CTLM.log("[main] Invalid player.");
     end
@@ -103,14 +103,10 @@ function CTLM.tick()
         CTLM.log("Taking screenshots...");
         local screenshotTaken = false;
         for index, player in ipairs(game.players) do
-            local configPlayer = global.players[player.name];
-            CTLM.log("player.valid" .. tostring(player.valid));
-            CTLM.log("player.connected" .. tostring(player.connected));
-            CTLM.log("configPlayer" .. tostring(configPlayer));
-            CTLM.log("configPlayer.enabled" .. tostring(configPlayer.enabled));
+            local configPlayer = global.players[player.index];
             if player.valid and player.connected and configPlayer and configPlayer.enabled then
                 screenshotTaken = true;
-                CTLM.screenshotPlayer(configPlayer);
+                CTLM.screenshotPlayer(player);
             end
         end
 
@@ -122,7 +118,7 @@ function CTLM.tick()
         end
 
         if screenshotTaken then
-            CTLM.config.set("screenshotNumber", global.config.screenshotNumber + 1);
+            global.config.screenshotNumber = global.config.screenshotNumber + 1;
         end
     end
 end
@@ -131,10 +127,9 @@ end
 --screenshot functions!
 --------------------------------------
 
-function CTLM.screenshotPlayer(configPlayer)
-    CTLM.log("[main] screenshotPlayer("  .. configPlayer.Name .. ")");
-    local player = game.get_player(configPlayer.name);
-    if not player then return nil end
+function CTLM.screenshotPlayer(player)
+    local configPlayer = global.players[player.index];
+    CTLM.log("[main] screenshotPlayer("  .. configPlayer.name .. ")");
 
     local currentTime = game.daytime;
 
@@ -146,9 +141,9 @@ function CTLM.screenshotPlayer(configPlayer)
         player = player,
         resolution = { configPlayer.width, configPlayer.height },
         zoom = configPlayer.zoom,
-        path = genFilename("player", configPlayer.name),
-        configPlayer.showGui,
-        configPlayer.showAltInfo
+        path = CTLM.genFilename("player", configPlayer.name),
+        show_gui = configPlayer.showGui,
+        show_entity_info = configPlayer.showAltInfo
     });
 
     game.daytime = currentTime;
@@ -156,7 +151,7 @@ function CTLM.screenshotPlayer(configPlayer)
 end
 
 function CTLM.screenshotPosition(configPosition)
-    CTLM.log("[main] screenshotPosition("  .. configPosition.Name .. ")");
+    CTLM.log("[main] screenshotPosition("  .. configPosition.name .. ")");
     local currentTime = game.daytime;
 
     if configPosition.dayOnly then
@@ -168,9 +163,9 @@ function CTLM.screenshotPosition(configPosition)
         position = { configPosition.positionX, configPosition.positionY },
         resolution = { configPosition.width, configPosition.height },
         zoom = configPosition.zoom,
-        path = genFilename("position", configPosition.name),
-        configPosition.showGui,
-        configPosition.showAltInfo
+        path = CTLM.genFilename("position", configPosition.name),
+        show_gui = configPosition.showGui,
+        show_entity_info = configPosition.showAltInfo
     });
 
     game.daytime = currentTime;
@@ -182,9 +177,9 @@ end
 --------------------------------------
 
 --File name to save screenshot as
-function CTLM.GenFilename(screenshotType, screenshotName)
-    CTLM.log("[main] GenFilename(" .. MOD_NAME .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", global.config.screenshotNumber) .. ".png" .. ")");
-    return MOD_NAME .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", global.config.screenshotNumber) .. ".png";
+function CTLM.genFilename(screenshotType, screenshotName)
+    CTLM.log("[main] genFilename(" .. MOD_NAME .. "/" .. global.config.saveFolder .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", global.config.screenshotNumber) .. ".png" .. ")");
+    return MOD_NAME .. "/" .. global.config.saveFolder .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", global.config.screenshotNumber) .. ".png";
 end
 
 function CTLM.log(msg)
@@ -222,9 +217,9 @@ function CTLM.getPlayerName(player)
     return playerName;
 end
 
-function CTLM.new_player(player)
+function CTLM.newPlayer(player)
     local playerName = CTLM.getPlayerName(player);
-    CTLM.log("[main] new_player(" .. playerName .. ")");
+    CTLM.log("[main] newPlayer(" .. playerName .. ")");
 
     if not global.players[player.index] then
         global.players[player.index] = CTLM.deepCopy(config.player_defaults);
