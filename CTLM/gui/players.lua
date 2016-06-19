@@ -72,20 +72,16 @@ function CTLM.gui.CTLM_settings_players_open(event)
         return frame;
     end
 
-    local playerName = "";
     local subFrame = newSubFrame();
     local buttonCounter = 0;
     for index, player in pairs(game.players) do
-        if not player.name or player.name == "" then
-            playerName = "UnnamedPlayer" .. player.index;
-        else
-            playerName = player.name;
-        end
-        if not global.players[playerName] then
-            global.players[playerName] = CTLM.deepCopy(config.player_defaults);
+        local playerName = CTLM.getPlayerName(player);
+
+        if not global.players[player.index] then
+            global.players[player.index] = CTLM.deepCopy(config.player_defaults);
         end
 
-        subFrame.add({type="button", name="CTLM_settings_playerEdit_open_" .. playerName, caption=playerName});
+        subFrame.add({type="button", name="CTLM_settings_playerEdit_open_" .. player.index, caption=playerName});
 
         buttonCounter = buttonCounter + 1;
         if buttonCounter % 5 == 0 then
