@@ -10,6 +10,9 @@ if not config.defaults then config.defaults = {} end
 
 config.defaults.enabled = false; -- Mod requires some basic config in gui first.
 
+-- Last number used for registering a position in global.positions
+config.defaults.lastPosition = 0;
+
 -- saves to script-output/CTLM/<saveFolder>/
 config.defaults.saveFolder = "temp";
 
