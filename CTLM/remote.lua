@@ -29,8 +29,8 @@ if not CTLM.remote then CTLM.remote = {} end
 
 ---[[
 function CTLM.remote.hardreset()
-    CTLM.log("[remote] hardreset();");
-    CTLM.hardreset();
+    CTLM.log("[remote] Sorry this is only enabled in debug releases;");
+    --CTLM.hardreset();
 end
 --]]
 

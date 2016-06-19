@@ -33,14 +33,12 @@ if not CTLM then CTLM = {} end
 if not CTLM.gui then CTLM.gui = {} end
 
 function CTLM.gui.init()
-    CTLM.log("[gui] init()");
     for key, player in pairs(game.players) do
         CTLM.gui.create_main_button(player);
     end
 end
 
 function CTLM.gui.hardreset()
-    CTLM.log("[gui] hardreset()");
     for key, player in pairs(game.players) do
         local root = player.gui.top.CTLM_mainbutton;
         if root then
@@ -52,12 +50,10 @@ function CTLM.gui.hardreset()
 end
 
 function CTLM.gui.newPlayer(player)
-    CTLM.log("[gui] newPlayer(" .. player.name .. ")");
     CTLM.gui.create_main_button(player);
 end
 
 function CTLM.gui.create_main_button(player)
-    CTLM.log("[gui] create_main_button(" .. player.name .. ")");
     local root = player.gui.top.CTLM_mainbutton;
     local destroyed = false;
     if root then
@@ -80,7 +76,6 @@ end
 
 --By the code this is horrid. Why doesn't the Factorio API allow registering a callback handler directly in the GUI.add function!
 function CTLM.gui.click(event)
-    CTLM.log("[gui] click()");
 
     --MAIN SETTINGS
     if event.element.name == "CTLM_mainbutton" then

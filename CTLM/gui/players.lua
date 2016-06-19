@@ -61,7 +61,6 @@ function CTLM.gui.CTLM_settings_players_open(event)
 
     local subFrameCounter = 0;
     local function newSubFrame()
-        CTLM.log("newSubFrame(" .. subFrameCounter .. ")");
         local frame = mainFrame.add({
             type="frame",
             name="sub" .. subFrameCounter,
@@ -112,8 +111,6 @@ function CTLM.gui.CTLM_settings_playerEdit_open(event)
     if player.gui.center.CTLM_settings_playerEdit ~= nil then
         player.gui.center.CTLM_settings_playerEdit.destroy();
     end
-
-    CTLM.log("playerEditName:" .. playerEditName);
 
     --root frame
     local rootFrame = player.gui.center.add({
@@ -206,15 +203,6 @@ function CTLM.gui.CTLM_settings_playerEdit_save(event)
     local zoom = tonumber(PlayerEditFrame.zoom_flow.textfield.text);
     local showGui = PlayerEditFrame.showGui_flow.checkbox.state;
     local showAltInfo = PlayerEditFrame.showAltInfo_flow.checkbox.state;
-
-    CTLM.log("playerEditName:" .. playerEditName);
-    CTLM.log("enabled:" .. tostring(enabled));
-    CTLM.log("dayOnly:" .. tostring(dayOnly));
-    CTLM.log("width:" .. width);
-    CTLM.log("height:" .. height);
-    CTLM.log("zoom:" .. zoom);
-    CTLM.log("showGui:" .. tostring(showGui));
-    CTLM.log("showAltInfo:" .. tostring(showAltInfo));
 
     local playerEditPlayer = game.get_player(playerEditName);
     global.players[player.index].enabled = enabled;

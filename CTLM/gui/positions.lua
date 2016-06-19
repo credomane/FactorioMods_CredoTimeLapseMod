@@ -62,7 +62,6 @@ function CTLM.gui.CTLM_settings_positions_open(event)
 
     local subFrameCounter = 0;
     local function newSubFrame()
-        CTLM.log("newSubFrame(" .. subFrameCounter .. ")");
         local frame = mainFrame.add({
             type="frame",
             name="sub" .. subFrameCounter,
@@ -120,8 +119,6 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     if player.gui.center.CTLM_settings_positionEdit ~= nil then
         player.gui.center.CTLM_settings_positionEdit.destroy();
     end
-
-    CTLM.log("positionKey:" .. positionKey);
 
     --root frame
     local rootFrame = player.gui.center.add({
@@ -279,19 +276,6 @@ function CTLM.gui.CTLM_settings_positionEdit_save(event)
     local positionY = tonumber(positionEditFrame.positionY_flow.textfield.text);
     local showGui = positionEditFrame.showGui_flow.checkbox.state;
     local showAltInfo = positionEditFrame.showAltInfo_flow.checkbox.state;
-
-    CTLM.log("enabled:" .. tostring(enabled));
-    CTLM.log("name:" .. name);
-    CTLM.log("surface:" .. surface);
-    CTLM.log("positionKey:" .. positionKey);
-    CTLM.log("dayOnly:" .. tostring(dayOnly));
-    CTLM.log("width:" .. width);
-    CTLM.log("height:" .. height);
-    CTLM.log("zoom:" .. zoom);
-    CTLM.log("positionX:" .. positionX);
-    CTLM.log("positionY:" .. positionY);
-    CTLM.log("showGui:" .. tostring(showGui));
-    CTLM.log("showAltInfo:" .. tostring(showAltInfo));
 
     global.positions[positionKey].enabled = enabled;
     global.positions[positionKey].name = name;

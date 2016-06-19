@@ -42,8 +42,6 @@ if not CTLM then CTLM = {} end
 
 --on_init()
 function CTLM.init()
-    CTLM.log("[main] init()");
-
     if not global.config then
         global.config = CTLM.deepCopy(config.defaults);
     end
@@ -66,7 +64,6 @@ end
 
 --on_gui_click
 function CTLM.gui_click(event)
-    CTLM.log("Gui element was clicked [" .. event.element.name .. "]");
     if string.starts(event.element.name, "CTLM_") then
         CTLM.gui.click(event);
     end
@@ -74,7 +71,6 @@ end
 
 --on_player_created()
 function CTLM.player_created(event)
-    CTLM.log("[main] player_created(" .. event.player_index .. ")");
     local player = game.get_player(event.player_index);
     if player.valid then
         CTLM.newPlayer(player);
@@ -129,7 +125,6 @@ end
 
 function CTLM.screenshotPlayer(player)
     local configPlayer = global.players[player.index];
-    CTLM.log("[main] screenshotPlayer("  .. configPlayer.name .. ")");
 
     local currentTime = game.daytime;
 
@@ -147,11 +142,9 @@ function CTLM.screenshotPlayer(player)
     });
 
     game.daytime = currentTime;
-    CTLM.log("CTLM.screenshotPlayer: " .. configPlayer.name);
 end
 
 function CTLM.screenshotPosition(configPosition)
-    CTLM.log("[main] screenshotPosition("  .. configPosition.name .. ")");
     local currentTime = game.daytime;
 
     if configPosition.dayOnly then
@@ -169,7 +162,6 @@ function CTLM.screenshotPosition(configPosition)
     });
 
     game.daytime = currentTime;
-    CTLM.log("CTLM.screenshotPosition: " .. configPosition.name);
 end
 
 --------------------------------------
@@ -178,7 +170,6 @@ end
 
 --File name to save screenshot as
 function CTLM.genFilename(screenshotType, screenshotName)
-    CTLM.log("[main] genFilename(" .. MOD_NAME .. "/" .. global.config.saveFolder .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", global.config.screenshotNumber) .. ".png" .. ")");
     return MOD_NAME .. "/" .. global.config.saveFolder .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", global.config.screenshotNumber) .. ".png";
 end
 
@@ -219,7 +210,6 @@ end
 
 function CTLM.newPlayer(player)
     local playerName = CTLM.getPlayerName(player);
-    CTLM.log("[main] newPlayer(" .. playerName .. ")");
 
     if not global.players[player.index] then
         global.players[player.index] = CTLM.deepCopy(config.player_defaults);
@@ -230,7 +220,6 @@ end
 -- Found on Internet. Original author unknown.
 -- deep copies a table to avoid references as that would be bad. :/
 function CTLM.deepCopy(object)
-    CTLM.log("[main] deepCopy()");
     local lookup_table = {}
     local function _copy(object)
         if type(object) ~= "table" then

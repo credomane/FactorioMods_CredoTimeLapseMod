@@ -108,15 +108,12 @@ function CTLM.gui.CTLM_settings_main_save(event)
     local screenshotInterval = tonumber(player.gui.center.CTLM_settings_main.mainFrame.screenshotInterval_flow.textfield.text);
 
     if enabled ~= global.config.enabled then
-        CTLM.log("[gui] new mod enabled state is " .. tostring(enabled));
         global.config.enabled = enabled;
     end
     if saveFolder ~= nil then
-        CTLM.log("[gui] new saveFolder " .. saveFolder);
         global.config.saveFolder = saveFolder;
     end
     if screenshotInterval ~= nil then
-        CTLM.log("[gui] new screenshotInterval " .. screenshotInterval);
         global.config.screenshotInterval = screenshotInterval;
     end
 end
