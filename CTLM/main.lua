@@ -54,12 +54,17 @@ function CTLM.init()
         global.positions = {};
     end
 
+    if not global.temp then
+        global.temp = {};
+    end
+
     CTLM.gui.init();
 end
 
 --on_configuration_changed()
 function CTLM.configuration_changed()
     CTLM.log("[main] configuration_changed()");
+    CTLM.init();
 end
 
 --on_gui_click
@@ -94,26 +99,40 @@ function CTLM.tick()
         return;
     end
 
+    --[[
+        Think I discovered a race-condition.
+        Game brightness is updated at the end of a tick (expected)
+        THEN screenshots are taken after that (unexpect) rather than when they were
+        originally called by the lua code. This is causing my day/night pics to 
+        be flipped even though the debug code says everything is fine.
+        This is...interesting to say the least.
+        Will have to mess with it more later tonight. When I'm not in a rush.
+        Being in a rush makes for bad coding. Likely my actual issue.
+    --]]
+    -- Take non dayOnly pics now and prep to take dayOnly pic in next tick
+    if (curTick + 1) % global.config.screenshotInterval == 0 then
+CTLM.log("night pics");
+        CTLM.takeScreenshots(false);
+        global.temp.currentTime = game.daytime;
+        game.daytime = 0;
+    end
+
+    -- Take dayOnly pics now and restore game.daytime.
     if curTick % global.config.screenshotInterval == 0 then
-        --Time to loop through and take them screenshots!
-        CTLM.log("Taking screenshots...");
-        local screenshotTaken = false;
-        for index, player in ipairs(game.players) do
-            local configPlayer = global.players[player.index];
-            if player.valid and player.connected and configPlayer and configPlayer.enabled then
-                screenshotTaken = true;
-                CTLM.screenshotPlayer(player);
-            end
-        end
+CTLM.log("day pics");
+        CTLM.takeScreenshots(true);
+        -- Time advanced a tick. So add our stored time to the new tick value of time.
+        -- Should prevent the day/night cycle from slowing getting out of sync from
+        --  where it would be without my meddling.
+        game.daytime = game.daytime + global.temp.currentTime;
+    end
 
-        for index, position in ipairs(global.positions) do
-            if position.enabled then
-                screenshotTaken = true;
-                CTLM.screenshotPosition(position);
-            end
-        end
-
-        if screenshotTaken then
+    -- Done with screenshots advance the counter!
+    if (curTick - 1) % global.config.screenshotInterval == 0 then
+CTLM.log("time reset");
+        if global.temp.screenshotTaken then
+            global.temp.screenshotTaken = false;
+            global.temp.currentTime = 0;
             global.config.screenshotNumber = global.config.screenshotNumber + 1;
         end
     end
@@ -123,45 +142,40 @@ end
 --screenshot functions!
 --------------------------------------
 
-function CTLM.screenshotPlayer(player)
-    local configPlayer = global.players[player.index];
-
-    local currentTime = game.daytime;
-
-    if configPlayer.dayOnly then
-        game.daytime = 0;
+function CTLM.takeScreenshots(dayOnly)
+    --Time to loop through and take them screenshots!
+    for index, player in ipairs(game.players) do
+        local configPlayer = global.players[player.index];
+        if player.valid and player.connected and configPlayer and configPlayer.enabled and (configPlayer.dayOnly == dayOnly) then
+CTLM.log("Took " .. configPlayer.name);
+            global.temp.screenshotTaken = true;
+            game.take_screenshot({
+                player = player,
+                resolution = { configPlayer.width, configPlayer.height },
+                zoom = configPlayer.zoom,
+                path = CTLM.genFilename("player", configPlayer.name),
+                show_gui = configPlayer.showGui,
+                show_entity_info = configPlayer.showAltInfo
+            });
+        end
     end
 
-    game.take_screenshot({
-        player = player,
-        resolution = { configPlayer.width, configPlayer.height },
-        zoom = configPlayer.zoom,
-        path = CTLM.genFilename("player", configPlayer.name),
-        show_gui = configPlayer.showGui,
-        show_entity_info = configPlayer.showAltInfo
-    });
-
-    game.daytime = currentTime;
-end
-
-function CTLM.screenshotPosition(configPosition)
-    local currentTime = game.daytime;
-
-    if configPosition.dayOnly then
-        game.daytime = 0;
+    for index, position in ipairs(global.positions) do
+        if position.enabled and (position.dayOnly == dayOnly) then
+CTLM.log("Took " .. position.name);
+            global.temp.screenshotTaken = true;
+            game.take_screenshot({
+                surface = game.get_surface(position.surface),
+                position = { position.positionX, position.positionY },
+                resolution = { position.width, position.height },
+                zoom = position.zoom,
+                path = CTLM.genFilename("position", position.name),
+                show_gui = position.showGui,
+                show_entity_info = position.showAltInfo
+            });
+        end
     end
 
-    game.take_screenshot({
---        surface = game.get_surface(configPosition.surface),
-        position = { configPosition.positionX, configPosition.positionY },
-        resolution = { configPosition.width, configPosition.height },
-        zoom = configPosition.zoom,
-        path = CTLM.genFilename("position", configPosition.name),
-        show_gui = configPosition.showGui,
-        show_entity_info = configPosition.showAltInfo
-    });
-
-    game.daytime = currentTime;
 end
 
 --------------------------------------
