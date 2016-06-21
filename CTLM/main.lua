@@ -102,34 +102,36 @@ function CTLM.tick()
     --[[
         Think I discovered a race-condition.
         Game brightness is updated at the end of a tick (expected)
-        THEN screenshots are taken after that (unexpect) rather than when they were
-        originally called by the lua code. This is causing my day/night pics to 
-        be flipped even though the debug code says everything is fine.
-        This is...interesting to say the least.
-        Will have to mess with it more later tonight. When I'm not in a rush.
-        Being in a rush makes for bad coding. Likely my actual issue.
+        THEN screenshots are taken either before or after the game brightness
+        update. Really weird. I broke this up into 4 parts when 2 should have
+        been enough. Oh well.
     --]]
-    -- Take non dayOnly pics now and prep to take dayOnly pic in next tick
-    if (curTick + 1) % global.config.screenshotInterval == 0 then
-CTLM.log("night pics");
+    -- Take non dayOnly pics now
+    if (curTick + 2) % global.config.screenshotInterval == 0 then
         CTLM.takeScreenshots(false);
+    end
+
+    -- Prep to take dayOnly pic in next tick. Avoids wierd lighting issues in screenshots
+    if (curTick + 1) % global.config.screenshotInterval == 0 then
         global.temp.currentTime = game.daytime;
         game.daytime = 0;
     end
 
-    -- Take dayOnly pics now and restore game.daytime.
+    -- Take dayOnly pics now.
     if curTick % global.config.screenshotInterval == 0 then
-CTLM.log("day pics");
         CTLM.takeScreenshots(true);
-        -- Time advanced a tick. So add our stored time to the new tick value of time.
-        -- Should prevent the day/night cycle from slowing getting out of sync from
-        --  where it would be without my meddling.
-        game.daytime = game.daytime + global.temp.currentTime;
     end
 
-    -- Done with screenshots advance the counter!
+    -- Done with screenshots now we fix the time to avoid the wierd lighting issue in screenshots!
     if (curTick - 1) % global.config.screenshotInterval == 0 then
-CTLM.log("time reset");
+        -- Time advanced a few times so add our stored time to the new tick value of time.
+        -- Should prevent the day/night cycle from slowing getting out of sync from
+        --  where it would be without my meddling.
+        local tempTime = game.daytime + global.temp.currentTime;
+        if tempTime > 1 then tempTime = tempTime - 1; end
+        game.daytime = tempTime;
+
+        -- Increment the screenshotNumber while we are at it.
         if global.temp.screenshotTaken then
             global.temp.screenshotTaken = false;
             global.temp.currentTime = 0;
@@ -147,7 +149,6 @@ function CTLM.takeScreenshots(dayOnly)
     for index, player in ipairs(game.players) do
         local configPlayer = global.players[player.index];
         if player.valid and player.connected and configPlayer and configPlayer.enabled and (configPlayer.dayOnly == dayOnly) then
-CTLM.log("Took " .. configPlayer.name);
             global.temp.screenshotTaken = true;
             game.take_screenshot({
                 player = player,
@@ -162,7 +163,6 @@ CTLM.log("Took " .. configPlayer.name);
 
     for index, position in ipairs(global.positions) do
         if position.enabled and (position.dayOnly == dayOnly) then
-CTLM.log("Took " .. position.name);
             global.temp.screenshotTaken = true;
             game.take_screenshot({
                 surface = game.get_surface(position.surface),
@@ -175,7 +175,6 @@ CTLM.log("Took " .. position.name);
             });
         end
     end
-
 end
 
 --------------------------------------
