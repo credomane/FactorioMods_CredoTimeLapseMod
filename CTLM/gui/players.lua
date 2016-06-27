@@ -21,9 +21,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 --]]
 
---Factorio provided libs
-require "defines"
-
 if not CTLM then CTLM = {} end
 if not CTLM.gui then CTLM.gui = {} end
 
@@ -31,7 +28,7 @@ if not CTLM.gui then CTLM.gui = {} end
 --PLAYERS SETTINGS
 ------------------------------------------------------------------------------------------------------
 function CTLM.gui.CTLM_settings_players_open(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     if player.gui.center.CTLM_settings_players ~= nil then
         return;
     end
@@ -91,7 +88,7 @@ function CTLM.gui.CTLM_settings_players_open(event)
 end
 
 function CTLM.gui.CTLM_settings_players_close(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     if player.gui.center.CTLM_settings_players ~= nil then
         player.gui.center.CTLM_settings_players.destroy();
     end
@@ -101,7 +98,7 @@ end
 --PLAYER EDIT SETTINGS
 ------------------------------------------------------------------------------------------------------
 function CTLM.gui.CTLM_settings_playerEdit_open(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     local playerEditIndex = tonumber(string.trimStart(event.element.name, "CTLM_settings_playerEdit_open_"));
 
     if player.gui.center.CTLM_settings_playerEdit ~= nil then
@@ -190,14 +187,14 @@ function CTLM.gui.CTLM_settings_playerEdit_open(event)
 end
 
 function CTLM.gui.CTLM_settings_playerEdit_close(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     if player.gui.center.CTLM_settings_playerEdit ~= nil then
         player.gui.center.CTLM_settings_playerEdit.destroy();
     end
 end
 
 function CTLM.gui.CTLM_settings_playerEdit_save(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     local PlayerEditFrame = player.gui.center.CTLM_settings_playerEdit.main;
     local playerEditIndex = tonumber(PlayerEditFrame.index_flow.index.caption);
     local enabled = PlayerEditFrame.enabled_flow.checkbox.state;

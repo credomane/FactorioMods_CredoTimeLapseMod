@@ -21,9 +21,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 --]]
 
---Factorio provided libs
-require "defines"
-
 if not CTLM then CTLM = {} end
 if not CTLM.gui then CTLM.gui = {} end
 
@@ -31,7 +28,7 @@ if not CTLM.gui then CTLM.gui = {} end
 --MAIN SETTINGS
 ------------------------------------------------------------------------------------------------------
 function CTLM.gui.CTLM_settings_main_open(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     if player.gui.center.CTLM_settings_main ~= nil then
         --Open button has been hit twice. Perform close action instead.
         CTLM.gui.CTLM_settings_main_close(event);
@@ -94,14 +91,14 @@ function CTLM.gui.CTLM_settings_main_open(event)
 end
 
 function CTLM.gui.CTLM_settings_main_close(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     if player.gui.center.CTLM_settings_main ~= nil then
         player.gui.center.CTLM_settings_main.destroy();
     end
 end
 
 function CTLM.gui.CTLM_settings_main_save(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
 
     local enabled = player.gui.center.CTLM_settings_main.mainFrame.enabled_flow.checkbox.state;
     local saveFolder = player.gui.center.CTLM_settings_main.mainFrame.saveFolder_flow.textfield.text;

@@ -22,7 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 --]]
 
 --Factorio provided libs
-require "defines";
 require "util";
 
 MOD_NAME = "CTLM";

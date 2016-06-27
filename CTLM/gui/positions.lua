@@ -21,9 +21,6 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 --]]
 
---Factorio provided libs
-require "defines"
-
 if not CTLM then CTLM = {} end
 if not CTLM.gui then CTLM.gui = {} end
 
@@ -31,7 +28,7 @@ if not CTLM.gui then CTLM.gui = {} end
 --POSITIONS SETTINGS
 ------------------------------------------------------------------------------------------------------
 function CTLM.gui.CTLM_settings_positions_open(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     if player.gui.center.CTLM_settings_positions ~= nil then
         return;
     end
@@ -85,14 +82,14 @@ function CTLM.gui.CTLM_settings_positions_open(event)
 end
 
 function CTLM.gui.CTLM_settings_positions_close(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     if player.gui.center.CTLM_settings_positions ~= nil then
         player.gui.center.CTLM_settings_positions.destroy();
     end
 end
 
 function CTLM.gui.CTLM_settings_positions_add(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     global.config.lastPosition = global.config.lastPosition + 1;
     local positionIndex = global.config.lastPosition;
     local positionName = "New Position " .. positionIndex;
@@ -115,7 +112,7 @@ end
 --POSITION EDIT SETTINGS
 ------------------------------------------------------------------------------------------------------
 function CTLM.gui.CTLM_settings_positionEdit_open(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     local positionKey = tonumber(string.trimStart(event.element.name, "CTLM_settings_positionEdit_open_"));
 
     if player.gui.center.CTLM_settings_positionEdit ~= nil then
@@ -272,14 +269,14 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
 end
 
 function CTLM.gui.CTLM_settings_positionEdit_close(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     if player.gui.center.CTLM_settings_positionEdit ~= nil then
         player.gui.center.CTLM_settings_positionEdit.destroy();
     end
 end
 
 function CTLM.gui.CTLM_settings_positionEdit_save(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     local positionEditFrame = player.gui.center.CTLM_settings_positionEdit.main;
     local positionKey = tonumber(positionEditFrame.index_flow.index.caption);
     local enabled = positionEditFrame.enabled_flow.checkbox.state;
@@ -310,7 +307,7 @@ function CTLM.gui.CTLM_settings_positionEdit_save(event)
 end
 
 function CTLM.gui.CTLM_settings_positionEdit_delete(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     local positionEditFrame = player.gui.center.CTLM_settings_positionEdit.main;
     local positionKey = tonumber(positionEditFrame.caption);
 
@@ -319,7 +316,7 @@ function CTLM.gui.CTLM_settings_positionEdit_delete(event)
 end
 
 function CTLM.gui.CTLM_settings_positionEdit_playerPos(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     local positionEditFrame = player.gui.center.CTLM_settings_positionEdit.main;
     positionEditFrame.positionX_flow.textfield.text=tonumber(string.format("%.2f", player.position.x));
     positionEditFrame.positionY_flow.textfield.text=tonumber(string.format("%.2f", player.position.x));

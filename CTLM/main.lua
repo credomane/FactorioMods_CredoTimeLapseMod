@@ -22,7 +22,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 --]]
 
 --Factorio provided libs
-require "defines";
 require "util";
 
 --CTLM config defaults
@@ -76,7 +75,7 @@ end
 
 --on_player_created()
 function CTLM.player_created(event)
-    local player = game.get_player(event.player_index);
+    local player = game.players[event.player_index];
     if player.valid then
         CTLM.newPlayer(player);
         CTLM.gui.newPlayer(player);
@@ -113,8 +112,23 @@ function CTLM.tick()
 
     -- Prep to take dayOnly pic in next tick. Avoids wierd lighting issues in screenshots
     if (curTick + 1) % global.config.screenshotInterval == 0 then
-        global.temp.currentTime = game.daytime;
-        game.daytime = 0;
+        global.temp.surfaces={};
+        for index, surface in pairs(game.surfaces) do
+            global.temp.surfaces[surface.name]={};
+            global.temp.surfaces[surface.name].currentTime = surface.daytime;
+        end
+
+        for index, player in pairs(game.players) do
+            if global.players[player.index].dayOnly then
+                player.surface.daytime = 0;
+            end
+        end
+
+        for index, position in pairs(global.positions) do
+            if position.dayOnly then
+                game.surfaces[position.surface].daytime = 0;
+            end
+        end
     end
 
     -- Take dayOnly pics now.
@@ -127,9 +141,11 @@ function CTLM.tick()
         -- Time advanced a few times so add our stored time to the new tick value of time.
         -- Should prevent the day/night cycle from slowing getting out of sync from
         --  where it would be without my meddling.
-        local tempTime = game.daytime + global.temp.currentTime;
-        if tempTime > 1 then tempTime = tempTime - 1; end
-        game.daytime = tempTime;
+        for surfaceName, surface in pairs(global.temp.surfaces) do
+            local tempTime = game.surfaces[surfaceName].daytime + surface.currentTime;
+            if tempTime > 1 then tempTime = tempTime - 1; end
+            game.surfaces[surfaceName].daytime = tempTime;
+        end
 
         -- Increment the screenshotNumber while we are at it.
         if global.temp.screenshotTaken then
@@ -146,7 +162,7 @@ end
 
 function CTLM.takeScreenshots(dayOnly)
     --Time to loop through and take them screenshots!
-    for index, player in ipairs(game.players) do
+    for index, player in pairs(game.players) do
         local configPlayer = global.players[player.index];
         if player.valid and player.connected and configPlayer and configPlayer.enabled and (configPlayer.dayOnly == dayOnly) then
             global.temp.screenshotTaken = true;
@@ -161,11 +177,11 @@ function CTLM.takeScreenshots(dayOnly)
         end
     end
 
-    for index, position in ipairs(global.positions) do
+    for index, position in pairs(global.positions) do
         if position.enabled and (position.dayOnly == dayOnly) then
             global.temp.screenshotTaken = true;
             game.take_screenshot({
-                surface = game.get_surface(position.surface),
+                surface = game.surfaces[position.surface],
                 position = { position.positionX, position.positionY },
                 resolution = { position.width, position.height },
                 zoom = position.zoom,
@@ -196,7 +212,7 @@ function CTLM.log(msg)
     if game then
         game.write_file(MOD_NAME .. "/debug.log", msg .. "\n", true);
 
-        for index, player in ipairs(game.players) do
+        for index, player in pairs(game.players) do
             player.print(msg)
         end
     end
