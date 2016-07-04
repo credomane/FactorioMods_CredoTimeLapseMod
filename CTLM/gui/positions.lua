@@ -101,7 +101,7 @@ function CTLM.gui.CTLM_settings_positions_add(event)
     local fakeEvent = {};
     fakeEvent.element = {name = "CTLM_settings_positionEdit_open_" .. positionIndex};
     fakeEvent.player_index = event.player_index;
-    
+
     CTLM.gui.CTLM_settings_positions_close(event);
     CTLM.gui.CTLM_settings_positions_open(event);
     CTLM.gui.CTLM_settings_positionEdit_open(fakeEvent);
@@ -318,7 +318,6 @@ end
 function CTLM.gui.CTLM_settings_positionEdit_playerPos(event)
     local player = game.players[event.player_index];
     local positionEditFrame = player.gui.center.CTLM_settings_positionEdit.main;
-    positionEditFrame.positionX_flow.textfield.text=tonumber(string.format("%.2f", player.position.x));
-    positionEditFrame.positionY_flow.textfield.text=tonumber(string.format("%.2f", player.position.x));
-    
+    positionEditFrame.positionX_flow.textfield.text=string.format("%.2f", player.position.x);
+    positionEditFrame.positionY_flow.textfield.text=string.format("%.2f", player.position.y);
 end
