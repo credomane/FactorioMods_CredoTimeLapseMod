@@ -24,10 +24,31 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 if not CTLM then CTLM = {} end
 if not CTLM.remote then CTLM.remote = {} end
 
----[[
-function CTLM.remote.hardreset()
-    CTLM.log("[remote] Sorry this is only enabled in debug releases;");
-    --CTLM.hardreset();
+CTLM.hardResetEnabled = false;
+CTLM.hardResetCode = nil;
+
+function CTLM.remote.hardreset(resetCode)
+    if resetCode then
+        resetCode = tonumber(resetCode);
+    end
+    if not CTLM.hardResetEnabled then
+        CTLM.hardResetEnabled = true;
+        CTLM.hardResetCode = game.tick; --Lame I know.
+        CTLM.print({"remote", "Repeat this command again with paremeter '" .. tostring(CTLM.hardResetCode) .. "' to confirm reset."});
+    elseif CTLM.hardResetEnabled and resetCode == CTLM.hardResetCode then
+        CTLM.hardResetEnabled = false;
+        CTLM.hardResetCode = nil;
+        CTLM.print({"remote", "Valid reset code. Resetting..."});
+        CTLM.hardReset();
+    else
+        CTLM.hardResetEnabled = false;
+        CTLM.hardResetCode = nil;
+        CTLM.print({"remote", "Invalid reset code. Reset canceled."});
+    end
 end
---]]
+
+function CTLM.remote.guireset()
+    CTLM.print({"remote", "Resetting GUI button."});
+    CTLM.gui.hardreset();
+end
 

@@ -57,12 +57,16 @@ function CTLM.init()
         global.temp = {};
     end
 
+    if not global.debug then
+        global.debug = false;
+    end
+
     CTLM.gui.init();
 end
 
 --on_configuration_changed()
 function CTLM.configuration_changed()
-    CTLM.log("[main] configuration_changed()");
+    CTLM.print({"main", "Configuration changed."});
     CTLM.init();
 end
 
@@ -80,7 +84,7 @@ function CTLM.player_created(event)
         CTLM.newPlayer(player);
         CTLM.gui.newPlayer(player);
     else
-        CTLM.log("[main] Invalid player.");
+        CTLM.print({"main", "Invalid player."});
     end
 end
 
@@ -200,18 +204,37 @@ function CTLM.genFilename(screenshotType, screenshotName)
     return MOD_NAME .. "/" .. global.config.saveFolder .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", global.config.screenshotNumber) .. ".png";
 end
 
-function CTLM.log(msg)
+function CTLM.print(msg)
     if type(msg) == "table" then
-        msg = "[" .. msg[1] .. "] [" .. msg[2] .. "] " .. msg[3];
+        msg = "[" .. msg[1] .. "]" .. msg[2];
     end
 
     msg = "[CTLM] " .. msg;
+    msg = "[CTLM] " .. msg;
+
+    if game then
+        for index, player in pairs(game.players) do
+            player.print(msg);
+        end
+    end
+end
+
+function CTLM.debug(msg)
+    if not global.debug then
+        return;
+    end
+
+    if type(msg) == "table" then
+        msg = "[" .. msg[1] .. "]" .. msg[2];
+    end
+
+    msg = "[CTLM] [debug] " .. msg;
 
     if game then
         game.write_file(MOD_NAME .. "/debug.log", msg .. "\n", true);
 
         for index, player in pairs(game.players) do
-            player.print(msg)
+            player.print(msg);
         end
     end
 end
@@ -222,7 +245,6 @@ function CTLM.hardreset()
     global.positions = nil;
 
     CTLM.init();
-    CTLM.gui.hardreset()
 end
 
 function CTLM.getPlayerName(player)
