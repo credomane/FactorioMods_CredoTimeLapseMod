@@ -206,7 +206,7 @@ end
 
 function CTLM.print(msg)
     if type(msg) == "table" then
-        msg = "[" .. msg[1] .. "]" .. msg[2];
+        msg = "[" .. msg[1] .. "] " .. msg[2];
     end
 
     msg = "[CTLM] " .. msg;
@@ -225,7 +225,7 @@ function CTLM.debug(msg)
     end
 
     if type(msg) == "table" then
-        msg = "[" .. msg[1] .. "]" .. msg[2];
+        msg = "[" .. msg[1] .. "] " .. msg[2];
     end
 
     msg = "[CTLM] [debug] " .. msg;
