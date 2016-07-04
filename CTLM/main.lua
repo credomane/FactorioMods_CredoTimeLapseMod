@@ -171,7 +171,6 @@ function CTLM.takeScreenshots(dayOnly)
                 resolution = { configPlayer.width, configPlayer.height },
                 zoom = configPlayer.zoom,
                 path = CTLM.genFilename("player", configPlayer.name),
-                show_gui = configPlayer.showGui,
                 show_entity_info = configPlayer.showAltInfo
             });
         end
@@ -186,7 +185,6 @@ function CTLM.takeScreenshots(dayOnly)
                 resolution = { position.width, position.height },
                 zoom = position.zoom,
                 path = CTLM.genFilename("position", position.name),
-                show_gui = position.showGui,
                 show_entity_info = position.showAltInfo
             });
         end

@@ -233,13 +233,6 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     textfield.style.maximal_width = 100;
     --[end] Main frame -> positionY setting
 
-    --[beg] Main frame -> showGui setting
-    local showGui_flow = mainFrame.add({type="flow", name="showGui_flow", direction="horizontal"});
-    showGui_flow.style.minimal_width = 250;
-    showGui_flow.style.maximal_width = 750;
-    showGui_flow.add({type="checkbox", name="checkbox", caption={"settings.positionEdit.showGui"}, state=global.positions[positionKey].showGui});
-    --[end] Main frame -> showGui setting
-
     --[beg] Main frame -> showAltInfo setting
     local showAltInfo_flow = mainFrame.add({type="flow", name="showAltInfo_flow", direction="horizontal"});
     showAltInfo_flow.style.minimal_width = 250;
@@ -288,7 +281,6 @@ function CTLM.gui.CTLM_settings_positionEdit_save(event)
     local zoom = tonumber(positionEditFrame.zoom_flow.textfield.text);
     local positionX = tonumber(positionEditFrame.positionX_flow.textfield.text);
     local positionY = tonumber(positionEditFrame.positionY_flow.textfield.text);
-    local showGui = positionEditFrame.showGui_flow.checkbox.state;
     local showAltInfo = positionEditFrame.showAltInfo_flow.checkbox.state;
 
     global.positions[positionKey].enabled = enabled;
@@ -300,7 +292,6 @@ function CTLM.gui.CTLM_settings_positionEdit_save(event)
     global.positions[positionKey].zoom = zoom;
     global.positions[positionKey].positionX = positionX;
     global.positions[positionKey].positionY = positionY;
-    global.positions[positionKey].showGui = showGui;
     global.positions[positionKey].showAltInfo = showAltInfo;
 
     player.print("[CTLM] Position " .. name .. " saved.");
