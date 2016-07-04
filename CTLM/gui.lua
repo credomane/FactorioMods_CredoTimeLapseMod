@@ -35,7 +35,7 @@ function CTLM.gui.init()
     end
 end
 
-function CTLM.gui.hardreset()
+function CTLM.gui.hardReset()
     for key, player in pairs(game.players) do
         --Clear CTLM main button
         local root = player.gui.top.CTLM_mainbutton;
@@ -48,6 +48,7 @@ function CTLM.gui.hardreset()
             if string.starts(guiName, "CTLM_") then
                 gui.destroy();
             end
+        end
     end
 
     CTLM.gui.init();

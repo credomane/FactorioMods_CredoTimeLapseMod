@@ -95,7 +95,7 @@ function CTLM.tick()
     -- So this is my fugly hack. :(
     -- Wish mods could specify a sorting order between 1 and 100!
     if curTick == 2 then
-        CTLM.gui.hardreset();
+        CTLM.gui.hardReset();
     end
 
     if game.speed > 3 or not global.config.enabled then
@@ -239,7 +239,7 @@ function CTLM.debug(msg)
     end
 end
 
-function CTLM.hardreset()
+function CTLM.hardReset()
     global.config = nil;
     global.players = nil;
     global.positions = nil;

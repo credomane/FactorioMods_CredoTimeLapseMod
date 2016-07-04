@@ -57,6 +57,11 @@ function CTLM.gui.CTLM_settings_main_open(event)
     enabled_flow.add({type="checkbox", name="checkbox", caption={"settings.main.enabled"}, state=global.config.enabled});
     --[end] Main frame -> mod enabled setting
 
+    --[beg] Main frame -> debug enabled setting
+    local debug_flow = mainFrame.add({type="flow", name="debug_flow", direction="horizontal"});
+    debug_flow.add({type="checkbox", name="checkbox", caption={"settings.main.debugEnabled"}, state=global.debug});
+    --[end] Main frame -> debug enabled setting
+
     --[beg] Main frame -> saveFolder setting
     local saveFolder_flow = mainFrame.add({type="flow", name="saveFolder_flow", direction="horizontal"});
     saveFolder_flow.add({type="label", caption={"settings.main.savefolder_left"}});
@@ -101,15 +106,22 @@ function CTLM.gui.CTLM_settings_main_save(event)
     local player = game.players[event.player_index];
 
     local enabled = player.gui.center.CTLM_settings_main.mainFrame.enabled_flow.checkbox.state;
+    local debugEnabled = player.gui.center.CTLM_settings_main.mainFrame.debug_flow.checkbox.state;
     local saveFolder = player.gui.center.CTLM_settings_main.mainFrame.saveFolder_flow.textfield.text;
     local screenshotInterval = tonumber(player.gui.center.CTLM_settings_main.mainFrame.screenshotInterval_flow.textfield.text);
 
     if enabled ~= global.config.enabled then
         global.config.enabled = enabled;
     end
+
+    if debugEnabled ~= global.debug then
+        global.debug = debugEnabled;
+    end
+
     if saveFolder ~= nil then
         global.config.saveFolder = saveFolder;
     end
+
     if screenshotInterval ~= nil then
         global.config.screenshotInterval = screenshotInterval;
     end

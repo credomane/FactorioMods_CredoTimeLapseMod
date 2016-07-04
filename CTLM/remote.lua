@@ -49,6 +49,6 @@ end
 
 function CTLM.remote.guireset()
     CTLM.print({"remote", "Resetting GUI button."});
-    CTLM.gui.hardreset();
+    CTLM.gui.hardReset();
 end
 
