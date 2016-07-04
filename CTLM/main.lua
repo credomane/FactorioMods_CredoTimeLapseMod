@@ -68,6 +68,7 @@ end
 function CTLM.configuration_changed()
     CTLM.print({"main", "Configuration changed."});
     CTLM.init();
+    CTLM.gui.init();
 end
 
 --on_gui_click

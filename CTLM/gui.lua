@@ -30,27 +30,34 @@ if not CTLM then CTLM = {} end
 if not CTLM.gui then CTLM.gui = {} end
 
 function CTLM.gui.init()
+    CTLM.gui.destroyAll();
     for key, player in pairs(game.players) do
         CTLM.gui.create_main_button(player);
     end
 end
 
-function CTLM.gui.hardReset()
+function CTLM.gui.destroyAll()
     for key, player in pairs(game.players) do
         --Clear CTLM main button
         local root = player.gui.top.CTLM_mainbutton;
         if root then
+            CTLM.debug({"GUI", "Destroying main button for '" .. CTLM.getPlayerName(player) .. "'."});
             player.gui.top.CTLM_mainbutton.destroy();
         end
 
         --Clear any open CTLM GUI windows
-        for guiName, gui in pairs(player.gui.center) do
+        local root = player.gui.center;
+        for key, guiName in pairs(root.children_names) do
             if string.starts(guiName, "CTLM_") then
-                gui.destroy();
+                CTLM.debug({"GUI", "Destroying '" .. guiName .. "' for '" .. CTLM.getPlayerName(player) .. "'."});
+                root[guiName].destroy();
             end
         end
     end
+end
 
+function CTLM.gui.hardReset()
+    CTLM.gui.destroyAll();
     CTLM.gui.init();
 end
 
