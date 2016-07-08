@@ -53,19 +53,21 @@ function CTLM.gui.CTLM_settings_main_open(event)
     });
 
     --[beg] Main frame -> mod enabled setting
-    local enabled_flow = mainFrame.add({type="flow", name="enabled_flow", direction="horizontal"});
-    enabled_flow.add({type="checkbox", name="checkbox", caption={"settings.main.enabled"}, state=global.config.enabled});
+    mainFrame.add({type="checkbox", name="enabled", caption={"settings.main.enabled"}, state=global.config.enabled});
     --[end] Main frame -> mod enabled setting
 
     --[beg] Main frame -> debug enabled setting
-    local debug_flow = mainFrame.add({type="flow", name="debug_flow", direction="horizontal"});
-    debug_flow.add({type="checkbox", name="checkbox", caption={"settings.main.debugEnabled"}, state=global.debug});
+    mainFrame.add({type="checkbox", name="debugEnabled", caption={"settings.main.debugEnabled"}, state=global.debug});
+    --[end] Main frame -> debug enabled setting
+
+    --[beg] Main frame -> debug enabled setting
+    mainFrame.add({type="checkbox", name="noticesEnabled", caption={"settings.main.noticesEnabled"}, state=global.config.noticesEnabled});
     --[end] Main frame -> debug enabled setting
 
     --[beg] Main frame -> saveFolder setting
     local saveFolder_flow = mainFrame.add({type="flow", name="saveFolder_flow", direction="horizontal"});
     saveFolder_flow.add({type="label", caption={"settings.main.savefolder_left"}});
-    local textfield = saveFolder_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
+    local textfield = saveFolder_flow.add({type="textfield", name="saveFolder", style="number_textfield_style"});
     textfield.text=global.config.saveFolder;
     textfield.style.minimal_width = 250;
     textfield.style.maximal_width = 250;
@@ -74,7 +76,7 @@ function CTLM.gui.CTLM_settings_main_open(event)
     --[beg] Main frame -> screenshotInterval setting
     local screenshotInterval_flow = mainFrame.add({type="flow", name="screenshotInterval_flow", direction="horizontal"});
     screenshotInterval_flow.add({type="label", caption={"settings.main.screenshotInterval_left"}});
-    local textfield = screenshotInterval_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
+    local textfield = screenshotInterval_flow.add({type="textfield", name="screenshotInterval", style="number_textfield_style"});
     textfield.text=global.config.screenshotInterval;
     screenshotInterval_flow.add({type="label", caption={"settings.main.screenshotInterval_right"}});
     --[end] Main frame -> screenshotInterval setting
@@ -105,10 +107,15 @@ end
 function CTLM.gui.CTLM_settings_main_save(event)
     local player = game.players[event.player_index];
 
-    local enabled = player.gui.center.CTLM_settings_main.mainFrame.enabled_flow.checkbox.state;
-    local debugEnabled = player.gui.center.CTLM_settings_main.mainFrame.debug_flow.checkbox.state;
-    local saveFolder = player.gui.center.CTLM_settings_main.mainFrame.saveFolder_flow.textfield.text;
-    local screenshotInterval = tonumber(player.gui.center.CTLM_settings_main.mainFrame.screenshotInterval_flow.textfield.text);
+    local enabled = player.gui.center.CTLM_settings_main.mainFrame.enabled.state;
+    local debugEnabled = player.gui.center.CTLM_settings_main.mainFrame.debugEnabled.state;
+    local noticesEnabled = player.gui.center.CTLM_settings_main.mainFrame.noticesEnabled.state;
+    local saveFolder = player.gui.center.CTLM_settings_main.mainFrame.saveFolder_flow.saveFolder.text;
+    local screenshotInterval = tonumber(player.gui.center.CTLM_settings_main.mainFrame.screenshotInterval_flow.screenshotInterval.text);
+
+    if screenshotInterval < 600 then
+        screenshotInterval = 600;
+    end
 
     if enabled ~= global.config.enabled then
         global.config.enabled = enabled;
@@ -118,12 +125,18 @@ function CTLM.gui.CTLM_settings_main_save(event)
         global.debug = debugEnabled;
     end
 
+    if noticesEnabled ~= global.config.noticesEnabled then
+        global.config.noticesEnabled = noticesEnabled;
+    end
+
     if saveFolder ~= nil then
         global.config.saveFolder = saveFolder;
     end
 
     if screenshotInterval ~= nil then
         global.config.screenshotInterval = screenshotInterval;
+    else
+        global.config.screenshotInterval = config.defaults.screenshotInterval;
     end
 
     player.print("[CTLM] Core settings updated.");

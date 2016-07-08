@@ -10,6 +10,8 @@ if not config.defaults then config.defaults = {} end
 
 config.defaults.enabled = false; -- Mod requires some basic config in gui first.
 
+config.defaults.noticesEnabled = false;
+
 -- Last number used for registering a position in global.positions
 config.defaults.lastPosition = 0;
 

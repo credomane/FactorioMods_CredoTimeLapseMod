@@ -112,6 +112,9 @@ function CTLM.tick()
     --]]
     -- Take non dayOnly pics now
     if (curTick + 2) % global.config.screenshotInterval == 0 then
+        if global.config.noticesEnabled then
+            CTLM.print("Taking screenshots...");
+        end
         CTLM.takeScreenshots(false);
     end
 
@@ -124,6 +127,12 @@ function CTLM.tick()
         end
 
         for index, player in pairs(game.players) do
+            if not global.players[player.index] then
+                CTLM.debug({"onTick", "Hmmm... {" .. CTLM.getPlayerName(player) .. "} didn't exist in db but should." });
+                CTLM.debug({"onTick", "Created {" .. CTLM.getPlayerName(player) .. "} with default values."});
+                CTLM.newPlayer(player);
+            end
+
             if global.players[player.index].dayOnly then
                 player.surface.daytime = 0;
             end
@@ -211,7 +220,6 @@ function CTLM.print(msg)
     end
 
     msg = "[CTLM] " .. msg;
-    msg = "[CTLM] " .. msg;
 
     if game then
         for index, player in pairs(game.players) do
@@ -221,9 +229,6 @@ function CTLM.print(msg)
 end
 
 function CTLM.debug(msg)
-    if not global.debug then
-        return;
-    end
 
     if type(msg) == "table" then
         msg = "[" .. msg[1] .. "] " .. msg[2];
@@ -234,8 +239,10 @@ function CTLM.debug(msg)
     if game then
         game.write_file(MOD_NAME .. "/debug.log", msg .. "\n", true);
 
-        for index, player in pairs(game.players) do
-            player.print(msg);
+        if global.debug then
+            for index, player in pairs(game.players) do
+                player.print(msg);
+            end
         end
     end
 end
