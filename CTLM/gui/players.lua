@@ -131,13 +131,11 @@ function CTLM.gui.CTLM_settings_playerEdit_open(event)
     --[end] Main frame -> player enabled setting
 
     --[beg] Main frame -> player enabled setting
-    local enabled_flow = mainFrame.add({type="flow", name="enabled_flow", direction="horizontal"});
-    enabled_flow.add({type="checkbox", name="checkbox", caption={"settings.playerEdit.enabled"}, state=global.players[playerEditIndex].enabled});
+    mainFrame.add({type="checkbox", name="enabled", caption={"settings.playerEdit.enabled"}, state=global.players[playerEditIndex].enabled});
     --[end] Main frame -> player enabled setting
 
     --[beg] Main frame -> dayOnly setting
-    local dayOnly_flow = mainFrame.add({type="flow", name="dayOnly_flow", direction="horizontal"});
-    dayOnly_flow.add({type="checkbox", name="checkbox", caption={"settings.playerEdit.dayOnly"}, state=global.players[playerEditIndex].dayOnly});
+    mainFrame.add({type="checkbox", name="dayOnly", caption={"settings.playerEdit.dayOnly"}, state=global.players[playerEditIndex].dayOnly});
     --[end] Main frame -> dayOnly setting
 
     --[beg] Main frame -> width setting
@@ -168,8 +166,7 @@ function CTLM.gui.CTLM_settings_playerEdit_open(event)
     --[end] Main frame -> zoom setting
 
     --[beg] Main frame -> showAltInfo setting
-    local showAltInfo_flow = mainFrame.add({type="flow", name="showAltInfo_flow", direction="horizontal"});
-    showAltInfo_flow.add({type="checkbox", name="checkbox", caption={"settings.playerEdit.showAltInfo"}, state=global.players[playerEditIndex].showAltInfo});
+    mainFrame.add({type="checkbox", name="showAltInfo", caption={"settings.playerEdit.showAltInfo"}, state=global.players[playerEditIndex].showAltInfo});
     --[end] Main frame -> showAltInfo setting
 
     --Main frame buttons
@@ -192,18 +189,35 @@ function CTLM.gui.CTLM_settings_playerEdit_save(event)
     local player = game.players[event.player_index];
     local PlayerEditFrame = player.gui.center.CTLM_settings_playerEdit.main;
     local playerEditIndex = tonumber(PlayerEditFrame.index_flow.index.caption);
-    local enabled = PlayerEditFrame.enabled_flow.checkbox.state;
-    local dayOnly = PlayerEditFrame.dayOnly_flow.checkbox.state;
+    local enabled = PlayerEditFrame.enabled.state;
+    local dayOnly = PlayerEditFrame.dayOnly.state;
     local width = tonumber(PlayerEditFrame.width_flow.textfield.text);
     local height = tonumber(PlayerEditFrame.height_flow.textfield.text);
     local zoom = tonumber(PlayerEditFrame.zoom_flow.textfield.text);
-    local showAltInfo = PlayerEditFrame.showAltInfo_flow.checkbox.state;
+    local showAltInfo = PlayerEditFrame.showAltInfo.state;
 
     global.players[playerEditIndex].enabled = enabled;
     global.players[playerEditIndex].dayOnly = dayOnly;
-    global.players[playerEditIndex].width = width;
-    global.players[playerEditIndex].height = height;
-    global.players[playerEditIndex].zoom = zoom;
+
+    if width ~= nil then
+        global.players[playerEditIndex].width = width;
+    else
+        player.print("[CTLM] Image width not a valid number. Continuing to use previous value.");
+    end
+
+    if height ~= nil then
+        global.players[playerEditIndex].height = height;
+    else
+        player.print("[CTLM] Image height not a valid number. Continuing to use previous value.");
+    end
+
+    if zoom ~= nil then
+        global.players[playerEditIndex].zoom = zoom;
+    else
+        player.print("[CTLM] Image zoom not a valid number. Continuing to use previous value.");
+    end
+
     global.players[playerEditIndex].showAltInfo = showAltInfo;
+
     player.print("[CTLM] Player " .. global.players[playerEditIndex].name .. " saved.");
 end

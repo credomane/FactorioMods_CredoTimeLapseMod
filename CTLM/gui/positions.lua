@@ -145,8 +145,7 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     --[end] Main frame -> player enabled setting
 
     --[beg] Main frame -> player enabled setting
-    local enabled_flow = mainFrame.add({type="flow", name="enabled_flow", direction="horizontal"});
-    enabled_flow.add({type="checkbox", name="checkbox", caption={"settings.positionEdit.enabled"}, state=global.positions[positionKey].enabled});
+    mainFrame.add({type="checkbox", name="enabled", caption={"settings.positionEdit.enabled"}, state=global.positions[positionKey].enabled});
     --[end] Main frame -> player enabled setting
 
     --[beg] Main frame -> name setting
@@ -272,7 +271,7 @@ function CTLM.gui.CTLM_settings_positionEdit_save(event)
     local player = game.players[event.player_index];
     local positionEditFrame = player.gui.center.CTLM_settings_positionEdit.main;
     local positionKey = tonumber(positionEditFrame.index_flow.index.caption);
-    local enabled = positionEditFrame.enabled_flow.checkbox.state;
+    local enabled = positionEditFrame.enabled.state;
     local name = positionEditFrame.name_flow.textfield.text;
     local surface = positionEditFrame.surface_flow.textfield.text;
     local dayOnly = positionEditFrame.dayOnly_flow.checkbox.state;
@@ -284,14 +283,51 @@ function CTLM.gui.CTLM_settings_positionEdit_save(event)
     local showAltInfo = positionEditFrame.showAltInfo_flow.checkbox.state;
 
     global.positions[positionKey].enabled = enabled;
-    global.positions[positionKey].name = name;
-    global.positions[positionKey].surface = surface;
+
+    if name ~= nil and name ~= '' then
+        global.positions[positionKey].name = name;
+    else
+        player.print("[CTLM] Position name is invalid. Continuing to use previous value.");
+    end
+
+    if surface ~= nil and surface ~= '' then
+        global.positions[positionKey].surface = surface;
+    else
+        player.print("[CTLM] Position surface is invalid. Continuing to use previous value.");
+    end
+
     global.positions[positionKey].dayOnly = dayOnly;
-    global.positions[positionKey].width = width;
-    global.positions[positionKey].height = height;
-    global.positions[positionKey].zoom = zoom;
-    global.positions[positionKey].positionX = positionX;
-    global.positions[positionKey].positionY = positionY;
+
+    if width ~= nil then
+        global.positions[positionKey].width = width;
+    else
+        player.print("[CTLM] Image width not a valid number. Continuing to use previous value.");
+    end
+
+    if height ~= nil then
+        global.positions[positionKey].height = height;
+    else
+        player.print("[CTLM] Image height not a valid number. Continuing to use previous value.");
+    end
+
+    if zoom ~= nil then
+        global.positions[positionKey].zoom = zoom;
+    else
+        player.print("[CTLM] Image zoom not a valid number. Continuing to use previous value.");
+    end
+
+    if positionX ~= nil then
+        global.positions[positionKey].positionX = positionX;
+    else
+        player.print("[CTLM] Position X not a valid number. Continuing to use previous value.");
+    end
+
+    if positionY ~= nil then
+        global.positions[positionKey].positionY = positionY;
+    else
+        player.print("[CTLM] Position Y not a valid number. Continuing to use previous value.");
+    end
+
     global.positions[positionKey].showAltInfo = showAltInfo;
 
     player.print("[CTLM] Position " .. name .. " saved.");
@@ -300,7 +336,8 @@ end
 function CTLM.gui.CTLM_settings_positionEdit_delete(event)
     local player = game.players[event.player_index];
     local positionEditFrame = player.gui.center.CTLM_settings_positionEdit.main;
-    local positionKey = tonumber(positionEditFrame.caption);
+    local positionKey = tonumber(positionEditFrame.index_flow.index.caption);
+    local name = global.positions[positionKey].name;
 
     global.positions[positionKey] = nil;
     player.print("[CTLM] Position " .. name .. " deleted.");

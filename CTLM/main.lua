@@ -253,6 +253,11 @@ function CTLM.hardReset()
     global.positions = nil;
 
     CTLM.init();
+
+    --Wiped the DB. Recreate all players with defaults.
+    for index, player in pairs(game.players) do
+        CTLM.newPlayer(player);
+    end
 end
 
 function CTLM.getPlayerName(player)
