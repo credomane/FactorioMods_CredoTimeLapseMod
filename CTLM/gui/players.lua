@@ -202,22 +202,22 @@ function CTLM.gui.CTLM_settings_playerEdit_save(event)
     if width ~= nil then
         global.players[playerEditIndex].width = width;
     else
-        player.print("[CTLM] Image width not a valid number. Continuing to use previous value.");
+        CTLM.msgPlayer(player, "Image width not a valid number. Continuing to use previous value.");
     end
 
     if height ~= nil then
         global.players[playerEditIndex].height = height;
     else
-        player.print("[CTLM] Image height not a valid number. Continuing to use previous value.");
+        CTLM.msgPlayer(player, "Image height not a valid number. Continuing to use previous value.");
     end
 
     if zoom ~= nil then
         global.players[playerEditIndex].zoom = zoom;
     else
-        player.print("[CTLM] Image zoom not a valid number. Continuing to use previous value.");
+        CTLM.msgPlayer(player, "Image zoom not a valid number. Continuing to use previous value.");
     end
 
     global.players[playerEditIndex].showAltInfo = showAltInfo;
 
-    player.print("[CTLM] Player " .. global.players[playerEditIndex].name .. " saved.");
+    CTLM.msgPlayer(player, "Player " .. global.players[playerEditIndex].name .. " saved.");
 end

@@ -120,18 +120,18 @@ function CTLM.gui.CTLM_settings_main_save(event)
     if saveFolder ~= nil and saveFolder ~= '' then
         global.config.saveFolder = saveFolder;
     else
-        player.print("[CTLM] Save folder is invalid. Continuing to use previous value.");
+        CTLM.msgPlayer(player, "Save folder is invalid. Continuing to use previous value.");
     end
 
     if screenshotInterval ~= nil then
         if screenshotInterval < 600 then
-            player.print("[CTLM] Screenshot interval too fast. Forced to 600 (10 seconds).");
+            CTLM.msgPlayer(player, "Screenshot interval too fast. Forced to 600 (10 seconds).");
             screenshotInterval = 600;
         end
         global.config.screenshotInterval = screenshotInterval;
     else
-        player.print("[CTLM] Screenshot interval not a valid number. Continuing to use previous value.");
+        CTLM.msgPlayer(player, "Screenshot interval not a valid number. Continuing to use previous value.");
     end
 
-    player.print("[CTLM] Core settings updated.");
+    CTLM.msgPlayer(player, "Core settings updated.");
 end

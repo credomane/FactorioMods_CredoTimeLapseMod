@@ -105,7 +105,7 @@ function CTLM.gui.CTLM_settings_positions_add(event)
     CTLM.gui.CTLM_settings_positions_close(event);
     CTLM.gui.CTLM_settings_positions_open(event);
     CTLM.gui.CTLM_settings_positionEdit_open(fakeEvent);
-    player.print("[CTLM] New position added. Please configure it.");
+    CTLM.msgPlayer(player, "New position added. Please configure it.");
 end
 
 ------------------------------------------------------------------------------------------------------
@@ -287,13 +287,13 @@ function CTLM.gui.CTLM_settings_positionEdit_save(event)
     if name ~= nil and name ~= '' then
         global.positions[positionKey].name = name;
     else
-        player.print("[CTLM] Position name is invalid. Continuing to use previous value.");
+        CTLM.msgPlayer(player, "Position name is invalid. Continuing to use previous value.");
     end
 
     if surface ~= nil and surface ~= '' then
         global.positions[positionKey].surface = surface;
     else
-        player.print("[CTLM] Position surface is invalid. Continuing to use previous value.");
+        CTLM.msgPlayer(player, "Position surface is invalid. Continuing to use previous value.");
     end
 
     global.positions[positionKey].dayOnly = dayOnly;
@@ -301,36 +301,36 @@ function CTLM.gui.CTLM_settings_positionEdit_save(event)
     if width ~= nil then
         global.positions[positionKey].width = width;
     else
-        player.print("[CTLM] Image width not a valid number. Continuing to use previous value.");
+        CTLM.msgPlayer(player, "Image width not a valid number. Continuing to use previous value.");
     end
 
     if height ~= nil then
         global.positions[positionKey].height = height;
     else
-        player.print("[CTLM] Image height not a valid number. Continuing to use previous value.");
+        CTLM.msgPlayer(player, "Image height not a valid number. Continuing to use previous value.");
     end
 
     if zoom ~= nil then
         global.positions[positionKey].zoom = zoom;
     else
-        player.print("[CTLM] Image zoom not a valid number. Continuing to use previous value.");
+        CTLM.msgPlayer(player, "Image zoom not a valid number. Continuing to use previous value.");
     end
 
     if positionX ~= nil then
         global.positions[positionKey].positionX = positionX;
     else
-        player.print("[CTLM] Position X not a valid number. Continuing to use previous value.");
+        CTLM.msgPlayer(player, "Position X not a valid number. Continuing to use previous value.");
     end
 
     if positionY ~= nil then
         global.positions[positionKey].positionY = positionY;
     else
-        player.print("[CTLM] Position Y not a valid number. Continuing to use previous value.");
+        CTLM.msgPlayer(player, "Position Y not a valid number. Continuing to use previous value.");
     end
 
     global.positions[positionKey].showAltInfo = showAltInfo;
 
-    player.print("[CTLM] Position " .. name .. " saved.");
+    CTLM.msgPlayer(player, "Position " .. name .. " saved.");
 end
 
 function CTLM.gui.CTLM_settings_positionEdit_delete(event)
@@ -340,7 +340,7 @@ function CTLM.gui.CTLM_settings_positionEdit_delete(event)
     local name = global.positions[positionKey].name;
 
     global.positions[positionKey] = nil;
-    player.print("[CTLM] Position " .. name .. " deleted.");
+    CTLM.msgPlayer(player, "Position " .. name .. " deleted.");
 end
 
 function CTLM.gui.CTLM_settings_positionEdit_playerPos(event)

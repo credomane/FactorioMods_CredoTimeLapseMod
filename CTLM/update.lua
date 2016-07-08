@@ -21,34 +21,33 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 --]]
 
+--Factorio provided libs
+require "util";
+
 if not CTLM then CTLM = {} end
-if not CTLM.remote then CTLM.remote = {} end
+if not CTLM.update then CTLM.update = {} end
 
-CTLM.hardResetEnabled = false;
-CTLM.hardResetCode = nil;
+function CTLM.update.doUpdate(oldVersion, newVersion)
+    CTLM.msgAll({"Updater", "Version changed from " .. oldVersion .. " to " .. newVersion .. "."});
 
-function CTLM.remote.hardreset(resetCode)
-    if resetCode then
-        resetCode = tonumber(resetCode);
+    if oldVersion > newVersion then
+        CTLM.msgAll({"Updater", "Version downgrade detected. I can't believe you've done this."});
+        return;
     end
-    if not CTLM.hardResetEnabled then
-        CTLM.hardResetEnabled = true;
-        CTLM.hardResetCode = game.tick; --Lame I know.
-        CTLM.msgAll({"remote", "Repeat this command again with parameter '" .. tostring(CTLM.hardResetCode) .. "' to confirm reset."});
-    elseif CTLM.hardResetEnabled and resetCode == CTLM.hardResetCode then
-        CTLM.hardResetEnabled = false;
-        CTLM.hardResetCode = nil;
-        CTLM.msgAll({"remote", "Valid reset code. Resetting..."});
-        CTLM.hardReset();
-    else
-        CTLM.hardResetEnabled = false;
-        CTLM.hardResetCode = nil;
-        CTLM.msgAll({"remote", "Invalid reset code. Reset canceled."});
+
+    if oldVersion < "0.0.7" then
+        CTLM.update.to_0_0_7();
     end
+
+    CTLM.init();
+    CTLM.gui.init();
 end
 
-function CTLM.remote.guireset()
-    CTLM.msgAll({"remote", "Resetting GUI button."});
-    CTLM.gui.hardReset();
-end
+------------------------------------------------------------------------------------------------------
+--INDIVIDUAL UPDATER FUNCTIONS
+------------------------------------------------------------------------------------------------------
 
+--Create the global.config.noticesEnabled = config.defaults.noticesEnabled
+function CTLM.update.to_0_0_7()
+    global.config.noticesEnabled = config.defaults.noticesEnabled;
+end

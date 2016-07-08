@@ -24,14 +24,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 --Factorio provided libs
 require "util";
 
-MOD_NAME = "CTLM";
+MOD_FULLNAME = "CredoTimeLapseMod";
+MOD_SHORTNAME = "CTLM";
 MOD_VERSION = "0.0.1";
 
 --CTLM libs
 require "CTLM.main";
 
 
-remote.add_interface(MOD_NAME, CTLM.remote)
+remote.add_interface(MOD_SHORTNAME, CTLM.remote)
 
 --Register event handlers! I'm lame and functions are named after their triggering event.
 script.on_init(CTLM.init);

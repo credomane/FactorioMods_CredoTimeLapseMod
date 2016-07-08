@@ -32,6 +32,7 @@ require "config.position_defaults"
 --CTLM libs
 require "CTLM.gui";
 require "CTLM.remote";
+require "CTLM.update";
 
 if not CTLM then CTLM = {} end
 
@@ -65,10 +66,14 @@ function CTLM.init()
 end
 
 --on_configuration_changed()
-function CTLM.configuration_changed()
-    CTLM.print({"main", "Configuration changed."});
-    CTLM.init();
-    CTLM.gui.init();
+function CTLM.configuration_changed(event)
+    for modName,modTable in pairs(event.mod_changes) do
+        if modName == MOD_FULLNAME then
+            CTLM.update.doUpdate(modTable.old_version, modTable.new_version);
+            CTLM.init();
+            CTLM.gui.init();
+        end
+    end
 end
 
 --on_gui_click
@@ -85,7 +90,7 @@ function CTLM.player_created(event)
         CTLM.newPlayer(player);
         CTLM.gui.newPlayer(player);
     else
-        CTLM.print({"main", "Invalid player."});
+        CTLM.msgAll({"main", "Invalid player."});
     end
 end
 
@@ -113,7 +118,7 @@ function CTLM.tick()
     -- Take non dayOnly pics now
     if (curTick + 2) % global.config.screenshotInterval == 0 then
         if global.config.noticesEnabled then
-            CTLM.print("Taking screenshots...");
+            CTLM.msgAll("Taking screenshots...");
         end
         CTLM.takeScreenshots(false);
     end
@@ -205,21 +210,32 @@ function CTLM.takeScreenshots(dayOnly)
     end
 end
 
+
 --------------------------------------
 --Helper functions!
 --------------------------------------
 
 --File name to save screenshot as
 function CTLM.genFilename(screenshotType, screenshotName)
-    return MOD_NAME .. "/" .. global.config.saveFolder .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", global.config.screenshotNumber) .. ".png";
+    return MOD_SHORTNAME .. "/" .. global.config.saveFolder .. "/" .. screenshotType .. "/" .. screenshotName .. "/" .. string.format("%05d", global.config.screenshotNumber) .. ".png";
 end
 
-function CTLM.print(msg)
+function CTLM.msgPlayer(player,msg)
     if type(msg) == "table" then
         msg = "[" .. msg[1] .. "] " .. msg[2];
     end
 
-    msg = "[CTLM] " .. msg;
+    msg = "[" .. MOD_SHORTNAME .. "] " .. msg;
+
+    player.print(msg);
+end
+
+function CTLM.msgAll(msg)
+    if type(msg) == "table" then
+        msg = "[" .. msg[1] .. "] " .. msg[2];
+    end
+
+    msg = "[" .. MOD_SHORTNAME .. "] " .. msg;
 
     if game then
         for index, player in pairs(game.players) do
@@ -234,10 +250,10 @@ function CTLM.debug(msg)
         msg = "[" .. msg[1] .. "] " .. msg[2];
     end
 
-    msg = "[CTLM] [debug] " .. msg;
+    msg = "[" .. MOD_SHORTNAME .. "] [debug] " .. msg;
 
     if game then
-        game.write_file(MOD_NAME .. "/debug.log", msg .. "\n", true);
+        game.write_file(MOD_SHORTNAME .. "/debug.log", msg .. "\n", true);
 
         if global.debug then
             for index, player in pairs(game.players) do
