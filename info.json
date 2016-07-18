@@ -8,5 +8,5 @@
     "description": "Takes screenshots of your world at specific intervals",
     "license": "MIT  https://opensource.org/licenses/MIT",
     "factorio_version": "0.13",
-    "dependencies": ["base >= 0.13.00"]
+    "dependencies": ["base >= 0.13.00", "? CredoModMenu >= 0.0.1"]
 }

@@ -1,0 +1,10 @@
+*.lua text
+*.json text
+
+.gitattributes export-ignore
+.gitignore export-ignore
+Makefile export-ignore
+
+*.svg export-ignore
+*.xcf export-ignore
+
