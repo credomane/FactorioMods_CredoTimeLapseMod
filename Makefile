@@ -18,10 +18,8 @@ release:
 
 dev: clean-dev
 	@mkdir -p $(BUILD_DIR)
-	git archive --prefix "$(MODNAME)_$(MODVERSION)/" -o "./$(BUILD_DIR)/temp.tar" HEAD
-	tar -xvf "./$(BUILD_DIR)/temp.tar" -C "$(BUILD_DIR)"
-	@rm "./$(BUILD_DIR)/temp.tar"
-	set -e; for file in $$(find . -iname '*.lua' -type f -not -path "/$(BUILD_DIR)/*"); do echo "Checking syntax: $$file" ; luac -p $$file; done;
+	rsync -qvaz --delete --exclude={.git,build} ./ "./$(BUILD_DIR)/$(MODNAME)_$(MODVERSION)"
+	set -e; for file in $$(find "./$(BUILD_DIR)/$(MODNAME)_$(MODVERSION)" -iname '*.lua' -type f); do echo "Checking syntax: $$file" ; luac -p $$file; done;
 
 cleanall: clean clean-dev
 
