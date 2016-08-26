@@ -68,7 +68,8 @@ end
 --on_configuration_changed()
 function CTLM.configuration_changed(event)
     for modName,modTable in pairs(event.mod_changes) do
-        if modName == MOD_FULLNAME then
+        --Only do something if the changed mod is CTLM and it isn't a new install of CTLM.
+        if modName == MOD_FULLNAME and modTable.old_version ~= nil then
             CTLM.update.doUpdate(modTable.old_version, modTable.new_version);
             CTLM.init();
             CTLM.gui.init();
