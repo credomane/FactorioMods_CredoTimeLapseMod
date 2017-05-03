@@ -126,7 +126,7 @@ function CTLM.gui.CTLM_settings_playerEdit_open(event)
     local index_flow = mainFrame.add({type="flow", name="index_flow", direction="horizontal"});
     index_flow.style.minimal_width = 250;
     index_flow.style.maximal_width = 750;
-    index_flow.add({type="label", name="text", caption={"settings.playerEdit.indexLabel"}});
+    index_flow.add({type="label", name="indexLabel", caption={"settings.playerEdit.indexLabel"}});
     index_flow.add({type="label", name="index", caption=playerEditIndex});
     --[end] Main frame -> player enabled setting
 

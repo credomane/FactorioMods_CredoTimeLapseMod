@@ -140,7 +140,7 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     local index_flow = mainFrame.add({type="flow", name="index_flow", direction="horizontal"});
     index_flow.style.minimal_width = 250;
     index_flow.style.maximal_width = 750;
-    index_flow.add({type="label", name="text", caption={"settings.positionEdit.indexLabel"}});
+    index_flow.add({type="label", name="indexLabel", caption={"settings.positionEdit.indexLabel"}});
     index_flow.add({type="label", name="index", caption=positionKey});
     --[end] Main frame -> player enabled setting
 
