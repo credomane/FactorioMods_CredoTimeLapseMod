@@ -145,7 +145,7 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     --[end] Main frame -> player enabled setting
 
     --[beg] Main frame -> player enabled setting
-    mainFrame.add({type="checkbox", name="enabled", caption={"settings.positionEdit.enabled"}, state=global.positions[positionKey].enabled});
+    mainFrame.add({type="checkbox", name="posEnabled", caption={"settings.positionEdit.enabled"}, state=global.positions[positionKey].enabled});
     --[end] Main frame -> player enabled setting
 
     --[beg] Main frame -> name setting
@@ -271,7 +271,7 @@ function CTLM.gui.CTLM_settings_positionEdit_save(event)
     local player = game.players[event.player_index];
     local positionEditFrame = player.gui.center.CTLM_settings_positionEdit.main;
     local positionKey = tonumber(positionEditFrame.index_flow.index.caption);
-    local enabled = positionEditFrame.enabled.state;
+    local enabled = positionEditFrame.posEnabled.state;
     local name = positionEditFrame.name_flow.textfield.text;
     local surface = positionEditFrame.surface_flow.textfield.text;
     local dayOnly = positionEditFrame.dayOnly_flow.checkbox.state;

@@ -53,7 +53,7 @@ function CTLM.gui.CTLM_settings_main_open(event)
     });
 
     --[beg] Main frame -> mod enabled setting
-    mainFrame.add({type="checkbox", name="enabled", caption={"settings.main.enabled"}, state=global.config.enabled});
+    mainFrame.add({type="checkbox", name="modEnabled", caption={"settings.main.enabled"}, state=global.config.enabled});
     --[end] Main frame -> mod enabled setting
 
     --[beg] Main frame -> debug enabled setting
@@ -107,7 +107,7 @@ end
 function CTLM.gui.CTLM_settings_main_save(event)
     local player = game.players[event.player_index];
 
-    local enabled = player.gui.center.CTLM_settings_main.mainFrame.enabled.state;
+    local enabled = player.gui.center.CTLM_settings_main.mainFrame.modEnabled.state;
     local debugEnabled = player.gui.center.CTLM_settings_main.mainFrame.debugEnabled.state;
     local noticesEnabled = player.gui.center.CTLM_settings_main.mainFrame.noticesEnabled.state;
     local saveFolder = player.gui.center.CTLM_settings_main.mainFrame.saveFolder_flow.saveFolder.text;

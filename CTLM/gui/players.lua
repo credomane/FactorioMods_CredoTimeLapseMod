@@ -131,7 +131,7 @@ function CTLM.gui.CTLM_settings_playerEdit_open(event)
     --[end] Main frame -> player enabled setting
 
     --[beg] Main frame -> player enabled setting
-    mainFrame.add({type="checkbox", name="enabled", caption={"settings.playerEdit.enabled"}, state=global.players[playerEditIndex].enabled});
+    mainFrame.add({type="checkbox", name="playerEnabled", caption={"settings.playerEdit.enabled"}, state=global.players[playerEditIndex].enabled});
     --[end] Main frame -> player enabled setting
 
     --[beg] Main frame -> dayOnly setting
@@ -189,7 +189,7 @@ function CTLM.gui.CTLM_settings_playerEdit_save(event)
     local player = game.players[event.player_index];
     local PlayerEditFrame = player.gui.center.CTLM_settings_playerEdit.main;
     local playerEditIndex = tonumber(PlayerEditFrame.index_flow.index.caption);
-    local enabled = PlayerEditFrame.enabled.state;
+    local enabled = PlayerEditFrame.playerEnabled.state;
     local dayOnly = PlayerEditFrame.dayOnly.state;
     local width = tonumber(PlayerEditFrame.width_flow.textfield.text);
     local height = tonumber(PlayerEditFrame.height_flow.textfield.text);
