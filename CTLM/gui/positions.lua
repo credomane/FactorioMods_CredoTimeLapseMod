@@ -54,7 +54,7 @@ function CTLM.gui.CTLM_settings_positions_open(event)
         name="main",
         direction="vertical",
         caption={"settings.positions.header"},
-        style="naked_frame_style"
+        style="naked_frame"
     });
 
     local subFrameCounter = 0;
@@ -63,7 +63,7 @@ function CTLM.gui.CTLM_settings_positions_open(event)
             type="frame",
             name="sub" .. subFrameCounter,
             direction="horizontal",
-            style="naked_frame_style"
+            style="naked_frame"
         });
         subFrameCounter = subFrameCounter + 1;
         return frame;
@@ -133,7 +133,7 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
         name="main",
         direction="vertical",
         caption=global.positions[positionKey].name,
-        style="naked_frame_style"
+        style="naked_frame"
     });
 
     --[beg] Main frame -> player index Label
@@ -141,7 +141,7 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     index_flow.style.minimal_width = 250;
     index_flow.style.maximal_width = 750;
     index_flow.add({type="label", name="indexLabel", caption={"settings.positionEdit.indexLabel"}});
-    index_flow.add({type="label", name="index", caption=positionKey});
+    index_flow.add({type="label", name="indexPosition", caption=positionKey});
     --[end] Main frame -> player enabled setting
 
     --[beg] Main frame -> player enabled setting
@@ -153,7 +153,7 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     name_flow.style.minimal_width = 250;
     name_flow.style.maximal_width = 750;
     name_flow.add({type="label", caption={"settings.positionEdit.name"}});
-    local textfield = name_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
+    local textfield = name_flow.add({type="textfield", name="textfield", style="number_textfield"});
     textfield.text=global.positions[positionKey].name;
     textfield.style.minimal_width = 250;
     textfield.style.maximal_width = 250;
@@ -164,7 +164,7 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     surface_flow.style.minimal_width = 250;
     surface_flow.style.maximal_width = 750;
     surface_flow.add({type="label", caption={"settings.positionEdit.surface"}});
-    local textfield = surface_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
+    local textfield = surface_flow.add({type="textfield", name="textfield", style="number_textfield"});
     textfield.text=global.positions[positionKey].surface;
     textfield.style.minimal_width = 250;
     textfield.style.maximal_width = 250;
@@ -182,7 +182,7 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     width_flow.style.minimal_width = 250;
     width_flow.style.maximal_width = 750;
     width_flow.add({type="label", caption={"settings.positionEdit.width"}});
-    local textfield = width_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
+    local textfield = width_flow.add({type="textfield", name="textfield", style="number_textfield"});
     textfield.text=global.positions[positionKey].width;
     textfield.style.minimal_width = 75;
     textfield.style.maximal_width = 100;
@@ -193,7 +193,7 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     height_flow.style.minimal_width = 250;
     height_flow.style.maximal_width = 750;
     height_flow.add({type="label", caption={"settings.positionEdit.height"}});
-    local textfield = height_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
+    local textfield = height_flow.add({type="textfield", name="textfield", style="number_textfield"});
     textfield.text=global.positions[positionKey].height;
     textfield.style.minimal_width = 75;
     textfield.style.maximal_width = 100;
@@ -204,7 +204,7 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     zoom_flow.style.minimal_width = 250;
     zoom_flow.style.maximal_width = 750;
     zoom_flow.add({type="label", caption={"settings.positionEdit.zoom"}});
-    local textfield = zoom_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
+    local textfield = zoom_flow.add({type="textfield", name="textfield", style="number_textfield"});
     textfield.text=global.positions[positionKey].zoom;
     textfield.style.minimal_width = 75;
     textfield.style.maximal_width = 100;
@@ -215,7 +215,7 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     positionX_flow.style.minimal_width = 250;
     positionX_flow.style.maximal_width = 750;
     positionX_flow.add({type="label", caption={"settings.positionEdit.positionX"}});
-    local textfield = positionX_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
+    local textfield = positionX_flow.add({type="textfield", name="textfield", style="number_textfield"});
     textfield.text=global.positions[positionKey].positionX;
     textfield.style.minimal_width = 75;
     textfield.style.maximal_width = 100;
@@ -226,7 +226,7 @@ function CTLM.gui.CTLM_settings_positionEdit_open(event)
     positionY_flow.style.minimal_width = 250;
     positionY_flow.style.maximal_width = 750;
     positionY_flow.add({type="label", caption={"settings.positionEdit.positionY"}});
-    local textfield = positionY_flow.add({type="textfield", name="textfield", style="number_textfield_style"});
+    local textfield = positionY_flow.add({type="textfield", name="textfield", style="number_textfield"});
     textfield.text=global.positions[positionKey].positionY;
     textfield.style.minimal_width = 75;
     textfield.style.maximal_width = 100;
@@ -270,7 +270,7 @@ end
 function CTLM.gui.CTLM_settings_positionEdit_save(event)
     local player = game.players[event.player_index];
     local positionEditFrame = player.gui.center.CTLM_settings_positionEdit.main;
-    local positionKey = tonumber(positionEditFrame.index_flow.index.caption);
+    local positionKey = tonumber(positionEditFrame.index_flow.indexPosition.caption);
     local enabled = positionEditFrame.posEnabled.state;
     local name = positionEditFrame.name_flow.textfield.text;
     local surface = positionEditFrame.surface_flow.textfield.text;
@@ -336,7 +336,7 @@ end
 function CTLM.gui.CTLM_settings_positionEdit_delete(event)
     local player = game.players[event.player_index];
     local positionEditFrame = player.gui.center.CTLM_settings_positionEdit.main;
-    local positionKey = tonumber(positionEditFrame.index_flow.index.caption);
+    local positionKey = tonumber(positionEditFrame.index_flow.indexPosition.caption);
     local name = global.positions[positionKey].name;
 
     global.positions[positionKey] = nil;

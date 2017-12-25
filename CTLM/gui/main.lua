@@ -49,7 +49,7 @@ function CTLM.gui.CTLM_settings_main_open(event)
         name="mainFrame",
         caption={"settings.main.header"},
         direction="vertical",
-        style="naked_frame_style"
+        style="naked_frame"
     });
 
     --[beg] Main frame -> mod enabled setting
@@ -67,7 +67,7 @@ function CTLM.gui.CTLM_settings_main_open(event)
     --[beg] Main frame -> saveFolder setting
     local saveFolder_flow = mainFrame.add({type="flow", name="saveFolder_flow", direction="horizontal"});
     saveFolder_flow.add({type="label", caption={"settings.main.savefolder_left"}});
-    local textfield = saveFolder_flow.add({type="textfield", name="saveFolder", style="number_textfield_style"});
+    local textfield = saveFolder_flow.add({type="textfield", name="saveFolder", style="number_textfield"});
     textfield.text=global.config.saveFolder;
     textfield.style.minimal_width = 250;
     textfield.style.maximal_width = 250;
@@ -76,7 +76,7 @@ function CTLM.gui.CTLM_settings_main_open(event)
     --[beg] Main frame -> screenshotInterval setting
     local screenshotInterval_flow = mainFrame.add({type="flow", name="screenshotInterval_flow", direction="horizontal"});
     screenshotInterval_flow.add({type="label", caption={"settings.main.screenshotInterval_left"}});
-    local textfield = screenshotInterval_flow.add({type="textfield", name="screenshotInterval", style="number_textfield_style"});
+    local textfield = screenshotInterval_flow.add({type="textfield", name="screenshotInterval", style="number_textfield"});
     textfield.text=global.config.screenshotInterval;
     screenshotInterval_flow.add({type="label", caption={"settings.main.screenshotInterval_right"}});
     --[end] Main frame -> screenshotInterval setting
